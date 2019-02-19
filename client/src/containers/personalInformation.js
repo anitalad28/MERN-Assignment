@@ -102,7 +102,7 @@ class PersonalInformation extends Component {
         return ( 
             <div className='container'>                
                 <div className='col-5'>
-                    <h2>Add Personal Information</h2> <br />
+                    <h2>Please Add Personal Information </h2> <br />
                     <div className='form-group'>
                         <label htmlFor="PersonUniqueId">Person Id</label>
                         <input type='text' name='PersonUniqueId' className='form-control' value={this.state.PersonUniqueId} onChange={this.onChangeUser.bind(this)} />
