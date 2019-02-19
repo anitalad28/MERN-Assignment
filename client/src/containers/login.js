@@ -36,6 +36,14 @@ class Login extends Component {
             .then(value => {
                             console.log(JSON.stringify(value));
                             sessionStorage.setItem("token",value.token);
+                            //localStorage.setItem("token", `Bearer ${resp.token}`);
+                            if (value.role === 1) {
+                                history.push("/admin-dashboard");
+                            } else if (value.role === 2) {
+                                history.push("/operator-dashboard");
+                            } else {
+                                history.push("/user-dashboard");
+                            }
                             })
             .catch(error => console.log (error.status));
         
