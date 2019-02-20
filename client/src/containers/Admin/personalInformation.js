@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import UserService from '../services/userService';
+import AdminService from '../../services/adminService';
+import AdminHeader from "./../Layouts/adminHeader";
 
 class PersonalInformation extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class PersonalInformation extends Component {
             BirthSign: ""          
         };
        
-       this.service = new UserService();
+       this.service = new AdminService();
     }
 
     onChangeUser (e) {
@@ -93,16 +94,17 @@ class PersonalInformation extends Component {
                             })
             .catch(error => console.log (error.status));
         
-            const history = this.props.history;
-            history.push('/PersonalInformation');
+            //const history = this.props.history;
+            //history.push('/PersonalInformation');
     }
 
 
     render() { 
         return ( 
-            <div className='container'>                
+            <div className='container'> 
+                <AdminHeader />                
                 <div className='col-5'>
-                    <h2>Please Add Personal Information </h2> <br />
+                    <h2>Add Personal Information </h2> <br />
                     <div className='form-group'>
                         <label htmlFor="PersonUniqueId">Person Id</label>
                         <input type='text' name='PersonUniqueId' className='form-control' value={this.state.PersonUniqueId} onChange={this.onChangeUser.bind(this)} />

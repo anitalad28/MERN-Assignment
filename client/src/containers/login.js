@@ -35,20 +35,20 @@ class Login extends Component {
             .then(data=>data.json())
             .then(value => {
                             console.log(JSON.stringify(value));
+
+                            const history = this.props.history;
                             sessionStorage.setItem("token",value.token);
+
                             //localStorage.setItem("token", `Bearer ${resp.token}`);
-                            if (value.role === 1) {
+                            if (value.role === 'Admin') {
                                 history.push("/admin-dashboard");
-                            } else if (value.role === 2) {
+                            } else if (value.role === 'Operator') {
                                 history.push("/operator-dashboard");
                             } else {
                                 history.push("/user-dashboard");
                             }
                             })
             .catch(error => console.log (error.status));
-        
-            const history = this.props.history;
-            history.push('/PersonalInformation');
     }
 
     onClickRegisterUserPage = () => { // ES6 formart --Arrow function

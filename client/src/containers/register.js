@@ -8,10 +8,8 @@ class Register extends Component {
             UserId: 0,
             UserName: "",
             Password: "",
-            EmailAddress: "",
-            RoleId: "3" // Set default userrole as default User
-        };
-        // this.service = new LoginService ();
+            EmailAddress: ""            
+        };        
         this.service = new UserService();
     }
 
@@ -34,24 +32,27 @@ class Register extends Component {
             UserName: this.state.UserName,
             Password: this.state.Password,           
             EmailAddress: this.state.EmailAddress,
-            RoleId: "3"   // Default user role        
+            Role: "AccessUser"   // Default user role        
         };
         
         this.service
             .createUser(user)
             .then(data=>data.json())
             .then(value => {
-                            console.log(JSON.stringify(value))
+                                console.log(JSON.stringify(value));
+                                        
+                                const history = this.props.history;
+                                history.push('/');
                             })
-            .catch(error => console.log (error.status));        
+            .catch(error => console.log (error.status));     
         
     }
 
     render() { 
         return ( 
-            <div>
-                <h1>Register User</h1> <br />
+            <div>                
                 <div className='container'>
+                    <h1>Please Register</h1> <br />
                     <div className='col-5'>
                         <div className='form-group'>
                             <label htmlFor="UserId">User Id</label>

@@ -24,5 +24,15 @@ module.exports = {
         }
         response.send({ status: 200, data: res });
         });
+    },
+
+    getRoles(request, response){        
+        UserRoleModel.find().exec(function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send({ status: response.statusCode, error: err });
+            }
+                response.send({ status: 200, data: res });
+        });
     }
 }

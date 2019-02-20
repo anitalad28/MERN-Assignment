@@ -8,6 +8,6 @@ module.exports = {
         UserName: String,
         EmailAddress: String,
         Password: String,
-        RoleId: Number
+        Role: String
       })
 }

@@ -33,7 +33,7 @@ module.exports = {
                 "UserName": request.body.UserName,
                 "EmailAddress": request.body.EmailAddress,
                 "Password": request.body.Password,
-                "RoleId": request.body.RoleId
+                "Role": request.body.Role
             };
         // pass the parsed object to "create()" method
         userModel.create(user, function(err, res) {
@@ -42,6 +42,17 @@ module.exports = {
             response.send(err);
         }
         response.send({ status: 200, data: res });
+        });
+    },
+
+    getUsers(request, response){ 
+        console.log('heres')   ;
+        userModel.find().exec(function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send({ status: response.statusCode, error: err });
+            }
+                response.send({ status: 200, data: res });
         });
     },
 
@@ -85,6 +96,7 @@ module.exports = {
                         authenticated: true,
                         message: "Login Success",
                         token: token,
+                        role: usr.Role
                     });     
                 }
             }

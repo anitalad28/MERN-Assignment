@@ -7,7 +7,7 @@ export default class UserService {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify (user)
+            body: JSON.stringify(user)
         });
         return promise;
     }
@@ -19,26 +19,19 @@ export default class UserService {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify (user)
+            body: JSON.stringify(user)
         });
         return promise;
     }
 
-    registerPersonalInfo(personalInfo) {
-        console.log ("In register personal info Service call" + JSON.stringify(personalInfo));
-        let promise = fetch ('http://localhost:6060/api/personalInfo/registration', {
-            method: "POST",
+    getUsers() {
+        console.log ("In create User Service call");
+        let promise = fetch ('http://localhost:6060/api/users', {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify(personalInfo)
+            }           
         });
         return promise;
     }
-
-    // getData () {
-    //     let promise = fetch ("http://localhost:4070/api/products");
-    //     return promise;
-    // }
-    
 }

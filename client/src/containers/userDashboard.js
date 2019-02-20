@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PersonalInformation from './personalInformation';
+//import PersonalInformation from './personalInformation';
 class UserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +12,7 @@ class UserDashboard extends Component {
         return (            
             <div className='container'> 
                 <h1>This is User Dashboard</h1> <br />                    
-                <PersonalInformation />                     
+                             
             </div>     
         );         
     }

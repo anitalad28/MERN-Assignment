@@ -30,7 +30,7 @@ instance.use(cors());
 // 5. Model-Schema-Mapping with collection on Mongo DB and
 // establishing collection with it.'
 mongoose.connect(
-  "mongodb://localhost/MeanAppDb",
+  "mongodb://localhost/MernAppDb",
   { useNewUrlParser: true }
 ).then(() => {
     console.log("connected to db");
@@ -55,6 +55,12 @@ var Admin = require("./routes/adminDAL");
 instance.post("/api/admin/createRole", function(request, response) {
     Admin.createUserRole(request, response);
 });
+
+// api to get roles
+instance.get("/api/roles", function(request, response) {  
+    Admin.getRoles(request, response);      
+});
+
 
 instance.post("/api/user/login", function(request, response) {
     User.authenticateUser(request, response);
@@ -82,6 +88,12 @@ instance.post("/api/personalInfo/registration", function(request, response) {
 instance.get("/api/persons", function(request, response) {  
     personRegistration.getPersons(request, response);      
 });
+
+// api to get users
+instance.get("/api/users", function(request, response) {  
+    User.getUsers(request, response);      
+});
+
 
 // 6. start listening
 instance.listen(6060, function() {
