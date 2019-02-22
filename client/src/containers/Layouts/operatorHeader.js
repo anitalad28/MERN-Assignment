@@ -1,28 +1,23 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const AdminHeader = function() {
+const OperatorHeader = function() {
   return (    
            <div className='container'> 
-                <h1>Admin Dashboard</h1> <br />             
+                <br />
+                <h1>Operator Dashboard</h1> <br />             
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">              
-                  <ul className="navbar-nav">
+                  <ul className="navbar-nav">                    
                     <li className="nav-item">
-                      <Link className="nav-link" to="/users">
-                        List Users |
+                      <Link className="nav-link" to="/add-personal-info">
+                          Add Personal Info |
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/new-user">
-                        New User |
+                      <Link className="nav-link" to="/view-personal-info">
+                          View Personal Info |
                       </Link>
-                    </li>
-                    
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/create-role">
-                        Roles |
-                      </Link>
-                    </li>
+                    </li>                
                   </ul>
                   <ul className="navbar-nav">
                     <li className="nav-item">
@@ -36,4 +31,4 @@ const AdminHeader = function() {
       )
   }
 
-export default AdminHeader;
+export default OperatorHeader;

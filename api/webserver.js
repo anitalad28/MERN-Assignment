@@ -46,9 +46,16 @@ if (!dbConnect) {
 }
 
 var User = require("./routes/userDAL");
+instance.post("/api/user/login", function(request, response) {
+    User.authenticateUser(request, response);
+});
 
 instance.post("/api/user/create", function(request, response) {
     User.createUser(request, response);
+});
+
+instance.post("/api/user/checkUserName", function(request, response) {
+    User.checkUserName(request, response);
 });
 
 var Admin = require("./routes/adminDAL");
@@ -61,9 +68,14 @@ instance.get("/api/roles", function(request, response) {
     Admin.getRoles(request, response);      
 });
 
+// api to approve user
+instance.put("/api/user/approve/:userId/:approvalStatus", function(request, response) {      
+    User.approveUser(request, response);      
+});
 
-instance.post("/api/user/login", function(request, response) {
-    User.authenticateUser(request, response);
+
+instance.get("/api/userDetails/:userId", function(request, response) {
+    User.getUserDetails(request, response);
 });
 
 var personalInfoRegistration = require("./routes/personalInfoDAL");

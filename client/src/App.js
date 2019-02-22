@@ -8,7 +8,8 @@ import OperatorDashboard from './containers/operatorDashboard';
 import User from './containers/Admin/user';
 import Users from './containers/Admin/users';
 import Role from './containers/Admin/role';
-import PersonalInformation from './containers/Admin/personalInformation';
+import AddPersonalInformation from './containers/Admin/addPersonalInformation';
+import ViewPersonalInformation from './containers/Admin/viewPersonalInformation';
 
 import Register from './containers/register';
 
@@ -30,9 +31,9 @@ class App extends Component {
           <Route exact path='/new-user' component={ User } />
           <Route exact path='/users' component={ Users } />
           <Route path='/create-role' component={ Role } />
-          <Route path='/add-personal-info' component={ PersonalInformation } />          
-          
-          
+          <Route path='/add-personal-info' component={ AddPersonalInformation } /> 
+          <Route path='/view-personal-info' component={ ViewPersonalInformation } /> 
+            
         </Switch>
       </Router>
     );

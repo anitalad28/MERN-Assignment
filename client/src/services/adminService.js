@@ -24,6 +24,28 @@ export default class UserService {
         return promise;
     }
 
+    approveUser(userId, approvalStatus) {
+        console.log ("In Create User Role Service call");
+        let promise = fetch('http://localhost:6060/api/user/approve/' + userId + '/' + approvalStatus, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        return promise;
+    }
+
+     getUsers() {
+        console.log ("In create User Service call");
+        let promise = fetch ('http://localhost:6060/api/users', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }           
+        });
+        return promise;
+    }
+
      getRoles(user) {
         console.log ("In Create User Role Service call");
         let promise = fetch ('http://localhost:6060/api/roles', {
@@ -47,4 +69,16 @@ export default class UserService {
         });
         return promise;
     }
+
+    isUserNameUnique(username) {
+        console.log ("In checkUniqueUserName Service call" + JSON.stringify(username));
+        let promise = fetch("http://localhost:6060/api/user/checkUserName", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+                body: JSON.stringify(username)
+            });
+    return promise;
+  }   
 }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import AdminService from '../../services/adminService';
-import AdminHeader from "./../Layouts/adminHeader";
+import OperatorHeader from "./../Layouts/operatorHeader";
 
-class PersonalInformation extends Component {
+class addPersonalInformation extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -22,12 +22,13 @@ class PersonalInformation extends Component {
             PhoneNo: "",
             MobileNo: "",
             PhysicalDisability: "",
-            MaritalStatues: ["Single","Married","Divorced","Widow","Widowe"],
+            MaritalStatues: ["Single","Married","Divorced","Widow","Widower"],
             EducationalStatues: ["Masters","Phd","Graduate","Under-Graduate", "SSC", "Illiterate", "HSC"],
-            BirthSign: ""          
+            BirthSign: "",
+            loggedInUserId: ""        
         };
        
-       this.service = new AdminService();
+       this.service = new AdminService();     
     }
 
     onChangeUser (e) {
@@ -57,7 +58,6 @@ class PersonalInformation extends Component {
         this.setState({ BirthSign: "" });
     }
 
-    //LOGIN SERVICE
     onClickAddPersonalInfo = (e) => {
         let personalInfo = {
             PersonUniqueId:  this.state.PersonUniqueId,
@@ -82,30 +82,27 @@ class PersonalInformation extends Component {
             PhysicalDisability: this.state.PhysicalDisability,
             MaritalStatus: this.state.MaritalStatus,
             EducationalStatus:  this.state.EducationalStatus,
-            BirthSign: this.state.BirthSign    
+            BirthSign: this.state.BirthSign,
+            loggedInUserId: sessionStorage.getItem("uid")       
         };
-         console.log (JSON.stringify (personalInfo));
-
+        
         this.service
             .registerPersonalInfo(personalInfo)
             .then(data=>data.json())
             .then(value => {
                             console.log(JSON.stringify(value))
                             })
-            .catch(error => console.log (error.status));
-        
-            //const history = this.props.history;
-            //history.push('/PersonalInformation');
+            .catch(error => console.log (error.status));        
     }
 
 
     render() { 
         return ( 
             <div className='container'> 
-                <AdminHeader />                
+                <OperatorHeader /> <br />               
                 <div className='col-5'>
                     <h2>Add Personal Information </h2> <br />
-                    <div className='form-group'>
+                    <div className='form-group'>                        
                         <label htmlFor="PersonUniqueId">Person Id</label>
                         <input type='text' name='PersonUniqueId' className='form-control' value={this.state.PersonUniqueId} onChange={this.onChangeUser.bind(this)} />
                     </div>
@@ -213,8 +210,6 @@ class PersonalInformation extends Component {
     }
 }
 
-// Componet that will render <option></option>
-// props.data is the data passed from the parent of this component
 class Options extends Component {
     render(){
         return(
@@ -223,4 +218,4 @@ class Options extends Component {
     }
 }
  
-export default PersonalInformation;
+export default addPersonalInformation;

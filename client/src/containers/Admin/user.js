@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AdminService from '../../services/adminService';
-import UserService from '../../services/userService';
 import AdminHeader from "./../Layouts/adminHeader";
 
 class User extends Component {
@@ -11,6 +10,8 @@ class User extends Component {
             UserName: "",
             Password: "",
             EmailAddress: "",
+            IsApproved: "",
+            isUserNameUniqueValue: false,
             Role: "AccessUser",
             Roles: ["AccessUser", "Admin", "Operator"],
             Users: [
@@ -25,8 +26,7 @@ class User extends Component {
             headers: [],
         };
         
-        this.adminService = new AdminService();
-        this.userService = new UserService();
+        this.adminService = new AdminService();        
         this.generateTableHeaders();
     }
 
@@ -41,36 +41,44 @@ class User extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    //CLEAR 
+    onCheckUserName(e) {     
+        this.adminService
+            .isUserNameUnique({ UserName: e.target.value })
+            .then(data => data.json())
+            .then(value => {
+                console.log(value.status);
+            if (value.status === 200) {               
+                this.setState({isUserNameUniqueValue : true})
+            } else if (value.status === 404) {                
+                this.setState({isUserNameUniqueValue : false})
+            }            
+        })
+        .catch(err => console.log(err));  
+    }
+    
     onClickClear (e) {
         this.setState({ UserId: "" });
         this.setState({ UserName: "" });
         this.setState({ Password: "" });
         this.setState({ EmailAddress: "" });
-        this.setState({ Role: "" });
-        
+        this.setState({ Role: "" });        
     }
-
-    //LOGIN SERVICE
+    
     onClickCreateUser = (e) => {
         let user = {
             UserId: this.state.UserId,
             UserName: this.state.UserName,
             Password: this.state.UserId,
             EmailAddress: this.state.EmailAddress,
-            Role: this.state.Role
+            Role: this.state.Role,
+            IsApproved: "U",
         };
       
         this.adminService
             .createUser(user)
-            .then(data=>data.json())
-            .then(value => {
-                            console.log(JSON.stringify(value))
-                            })
+            .then(data => data.json())
+            .then(value => {console.log(JSON.stringify(value)) })
             .catch(error => console.log (error.status));
-        
-        const history = this.props.history;
-        history.push ('/admin-dashboard');
     }   
 
     getSelectedProduct(u) {       
@@ -83,16 +91,16 @@ class User extends Component {
     
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
-        let users = this.userService
-                        .getUsers()
-                        .then(data=>data.json())
-                        .then(value=>{
-                            this.setState({ Users: value.data });                                                   
-                            console.log(JSON.stringify(value));
-                        })
-                        .catch(error=>{
-                            console.log(`Error occurred ${error.status}`);
-                        })
+        this.adminService
+        .getUsers()
+        .then(data => data.json())
+        .then(value => {
+            this.setState({ Users: value.data });                                                   
+            console.log(JSON.stringify(value));
+        })
+        .catch(error => {
+            console.log(`Error occurred ${error.status}`);
+        })
     }
             
     render() { 
@@ -103,26 +111,56 @@ class User extends Component {
                     <h2>Create User</h2> <br />
                     <div className='form-group'>
                         <label htmlFor="UserId">User Id</label>
-                        <input type='text' name='UserId' className='form-control' value={this.state.UserId} onChange={this.onChangeUser.bind(this)} />
+                        <input 
+                                type='text'
+                                name='UserId' 
+                                className='form-control' 
+                                value={this.state.UserId}
+                                onChange={this.onChangeUser.bind(this)} />
                     </div>
                     <div className='form-group'>
                         <label htmlFor="UserName">User Name</label>
-                        <input type='text' name='UserName' className='form-control' value={this.state.UserName} onChange={this.onChangeUser.bind(this)} />
+                        <input 
+                                type='text'
+                                name='UserName' 
+                                className='form-control'
+                                onBlur={this.onCheckUserName.bind(this)} 
+                                value={this.state.UserName} 
+                                onChange={this.onChangeUser.bind(this)} />
+                                {this.state.isUserNameUniqueValue ? (
+                                    <p className="alert-danger">
+                                    Username already used
+                                    </p>
+                                ) : null}
                     </div>
                      <div className='form-group'>
                         <label htmlFor="Password">Password</label>
-                        <input type='password' name='Password' className='form-control' value={this.state.Password} onChange={this.onChangeUser.bind(this)} />
+                        <input 
+                                type='password' 
+                                name='Password' 
+                                className='form-control' 
+                                value={this.state.Password} 
+                                onChange={this.onChangeUser.bind(this)} />
                     </div>
                     <div className='form-group'>
                         <label htmlFor="EmailAddress">Email Address</label>
-                        <input type='text' name='EmailAddress' className='form-control' value={this.state.EmailAddress} onChange={this.onChangeUser.bind(this)} />
+                        <input 
+                                type='text' 
+                                name='EmailAddress' 
+                                className='form-control' 
+                                value={this.state.EmailAddress} 
+                                onChange={this.onChangeUser.bind(this)} />
                     </div>
                     <div className='form-group'>
                         <label htmlFor="Role">Role</label>
-                        <select className="form-control" name="Role" value={this.state.Role} onChange={this.onChangeUser.bind(this)}>
-                            {this.state.Roles.map((c, i) => (
-                                <Options key={i} data={c} />
-                            ))}
+                        <select 
+                                className="form-control" 
+                                name="Role" 
+                                value={this.state.Role} 
+                                onChange={this.onChangeUser.bind(this)}>
+                                    {this.state.Roles.map((c, i) => (
+                                        <Options key={i} data={c} />
+                                    ))}
                         </select>                         
                     </div>
                     <div className='form-group'>
@@ -130,10 +168,18 @@ class User extends Component {
                             <tbody>
                                 <tr>
                                     <td>
-                                        <input type='button' value='Clear' className='btn btn-default' onClick={ this.onClickClear.bind(this) } />
+                                        <input 
+                                                type='button' 
+                                                value='Clear' 
+                                                className='btn btn-default' 
+                                                onClick={this.onClickClear.bind(this) } />
                                     </td>
                                     <td>
-                                    <input type='button' value='Add User' className='btn btn-default btn-success' onClick=        {this.onClickCreateUser.bind(this)} />
+                                        <input 
+                                            type='button' 
+                                            value='Add User' 
+                                            className='btn btn-default btn-success' 
+                                            onClick={this.onClickCreateUser.bind(this)} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -154,7 +200,7 @@ class User extends Component {
                          <tbody>
                             {this.state.Users.map((prd, idx) => (
                                   <TableRow key={idx} row={prd}
-                                  selected={this.getSelectedProduct.bind(this)}                                    
+                                    selected={this.getSelectedProduct.bind(this)}                                    
                                   />                               
                               ))}                        
                         </tbody>
@@ -171,8 +217,6 @@ class TableHeader extends Component {
     }
 }
 
-// Componet that will render <option></option>
-// props.data is the data passed from the parent of this component
 class Options extends Component {
     render(){
         return(
@@ -185,7 +229,6 @@ class TableRow extends Component{
     onRowClick(){
         this.props.selected(this.props.row);
     };
-
     render(){        
         return(
             <tr onClick={this.onRowClick.bind(this)}>

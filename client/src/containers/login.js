@@ -6,7 +6,7 @@ class Login extends Component {
         super(props);
         this.state = { 
             Username: "",
-            Password: ""            
+            Password: ""           
         };
         // this.service = new LoginService ();
         this.service = new UserService();
@@ -38,10 +38,12 @@ class Login extends Component {
 
                             const history = this.props.history;
                             sessionStorage.setItem("token",value.token);
+                            sessionStorage.setItem("uid", value.uid);
+                            sessionStorage.setItem("role", value.role);    
 
                             //localStorage.setItem("token", `Bearer ${resp.token}`);
                             if (value.role === 'Admin') {
-                                history.push("/admin-dashboard");
+                                history.push("/admin-dashboard");                               
                             } else if (value.role === 'Operator') {
                                 history.push("/operator-dashboard");
                             } else {
@@ -58,37 +60,45 @@ class Login extends Component {
     
     render() { 
         return (
-            <div className='container'>                
-                <div className='col-5'>
-                    <h1>Login</h1> <br />
-                    <div className='form-group'>
-                        <label htmlFor="UserName">User Name</label>
-                        <input type='text' name='Username' className='form-control' value={this.state.Username} onChange={this.onChangeUser.bind(this)} required/>
-                    </div>
-                    <div className='form-group'>
-                        <label htmlFor="Password">Password</label>
-                        <input type='password' name='Password' className='form-control' value={this.state.Password} onChange={this.onChangeUser.bind(this)} required/>
-                    </div>
-                    <div className='form-group'>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <input type='button' value='Reset' className='btn btn-default' onClick={ this.onClickClear.bind(this) } />
-                                    </td>
-                                    <td>
-                                    <input type='button' value='Login' className='btn btn-default btn-success' onClick={this.onClickLogin.bind(this)} />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div className="container login login">
+                <div className=" row  justify-content-center align-items-center">
+                    <div className="col-md-7">
+                        <h1 className="text-center">Login Page</h1>
+                        <hr />
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="userName">User Name</label>
+                                <input
+                                type="text"
+                                className="form-control"                                
+                                name="Username"
+                                value={this.state.Username}
+                                onChange={this.onChangeUser.bind(this)}
+                                placeholder="username"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input
+                                type="password"
+                                className="form-control"                               
+                                name="Password"
+                                value={this.state.Password}
+                                onChange={this.onChangeUser.bind(this)}
+                                placeholder="**********"
+                                />
+                            </div>
+                            <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={this.onClickLogin.bind(this)}
+                            >
+                                Login
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <br />
-                <span> Not a user?&nbsp;&nbsp;&nbsp;
-                    <button className='btn btn-default btn-success' onClick={this.onClickRegisterUserPage}> Please Sign Up</button>
-                </span>
-            </div>     
+            </div>        
         );         
     }
 }

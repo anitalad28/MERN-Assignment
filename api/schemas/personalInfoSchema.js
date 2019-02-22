@@ -26,6 +26,7 @@ module.exports = {
         PhysicalDisability: String,
         MaritalStatus: String,
         EducationalStatus: String,
-        BirthSign: String
+        BirthSign: String,
+        loggedInUserId: String
       })      
 }

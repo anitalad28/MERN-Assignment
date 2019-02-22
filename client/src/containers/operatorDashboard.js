@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import OperatorHeader from "./Layouts/operatorHeader";
 
 class OperatorDashboard extends Component {
     constructor(props) {
@@ -11,8 +12,8 @@ class OperatorDashboard extends Component {
     render() { 
         return (
             <div className='container'>                
-                <div className='col-5'>
-                    <h1>Operator Dashboard</h1> <br />
+                <div className='col-5'>                    
+                    <OperatorHeader />
                  </div>       
             </div>     
         );         

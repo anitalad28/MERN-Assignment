@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import UserService from '../../services/userService';
+import AdminService from '../../services/adminService';
 import AdminHeader from "./../Layouts/adminHeader";
 
 class Users extends Component {
     constructor(props) {
         super(props);
-        this.state = {            
-            Role: "AccessUser",
-            Roles: ["AccessUser", "Admin", "Operator"],
+        this.state = {                        
             Users: [
               {
                 "User Id": 0,
@@ -21,7 +19,7 @@ class Users extends Component {
             headers: [],
         };
               
-        this.userService = new UserService();
+        this.adminService = new AdminService();
         this.generateTableHeaders();
     }
 
@@ -31,10 +29,21 @@ class Users extends Component {
         this.state.headers.push(h);
       }
     }
-      
-    //method weill be excuted immediatly after the render() completes its job
-    componentDidMount(){
-        let users = this.userService
+
+    approveUser(user) {  
+        var setApprovalVar;
+        let userId = user._id;  
+        if( user.IsApproved === "A") {
+           setApprovalVar ="U";
+        } else {
+           setApprovalVar = "A";
+        }
+        
+        this.adminService
+            .approveUser(userId, setApprovalVar)
+            .then(data =>data.json())
+            .then(value => {    
+                    this.adminService
                         .getUsers()
                         .then(data=>data.json())
                         .then(value=>{
@@ -44,6 +53,25 @@ class Users extends Component {
                         .catch(error=>{
                             console.log(`Error occurred ${error.status}`);
                         })
+            })
+            .catch(error=>{
+                console.log(`Error occurred ${error.status}`);
+            })
+    }
+
+      
+    //method weill be excuted immediatly after the render() completes its job
+    componentDidMount(){
+        this.adminService
+        .getUsers()
+        .then(data=>data.json())
+        .then(value=>{
+            this.setState({ Users: value.data });                                                   
+            console.log(JSON.stringify(value));
+        })
+        .catch(error=>{
+            console.log(`Error occurred ${error.status}`);
+        })
     }
         
     render() { 
@@ -54,17 +82,17 @@ class Users extends Component {
                     <table className="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                {
-                                    this.state.headers.map((h, i) => 
-                                        ( <TableHeader key={i} header={h} /> )
-                                    )
-                                }
+                                {this.state.headers.map((h, i) => 
+                                    ( <TableHeader key={i} header={h} /> )
+                                )}
                             </tr>
                         </thead>
                          <tbody>
                             {this.state.Users.map((prd, idx) => (
-                                  <TableRow key={idx} row={prd}/>                               
-                              ))}                        
+                                <TableRow key={idx} row={prd}
+                                approve={this.approveUser.bind(this)}
+                                />                               
+                            ))}                        
                         </tbody>
                     </table>
                 </div>                
@@ -79,24 +107,29 @@ class TableHeader extends Component {
     }
   }
 
-class TableRow extends Component{
-    onRowClick(){
-        this.props.selected(this.props.row);
-    };
-
+class TableRow extends Component {
     onClickApprove(){
         this.props.approve(this.props.row);
     };
 
-    render(){        
+    render(){  
+      const IsApproved = this.props.row.IsApproved;     
+      let setApprovedButtonValue;
+
+      if(IsApproved === "A") {
+        setApprovedButtonValue ="Approved"   
+      } else {
+        setApprovedButtonValue = "Not Apporved"  
+      }
+
         return(
-            <tr onClick={this.onRowClick.bind(this)}>
+            <tr>
                 <td>{this.props.row.UserId}</td>
                 <td>{this.props.row.UserName}</td>
                 <td>{this.props.row.Password}</td>
                 <td>{this.props.row.EmailAddress}</td>
-                <td>{this.props.row.Role}</td>
-                <td><input type="button" value="Approve" className="btn btn-warning" onClick={this.onClickApprove.bind(this)} /></td>                               
+                <td>{this.props.row.Role}</td> 
+                <td><input type="button" value={setApprovedButtonValue} className="btn btn-warning" onClick={this.onClickApprove.bind(this)} /></td>                                   
             </tr>
         )
     }

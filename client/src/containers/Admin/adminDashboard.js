@@ -4,9 +4,7 @@ import AdminHeader from "./../Layouts/adminHeader";
 class AdminDashboard extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            
-        };        
+        this.state = { };        
     }
   
     render() { 

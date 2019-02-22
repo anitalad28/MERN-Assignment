@@ -24,7 +24,9 @@ module.exports = {
             "PhysicalDisability": request.body.PhysicalDisability,
             "MaritalStatus": request.body.MaritalStatus,
             "EducationalStatus": request.body.EducationalStatus,
-            "BirthSign": request.body.BirthSign
+            "BirthSign": request.body.BirthSign,
+            "loggedInUserId":  request.body.loggedInUserId    
+            
         };
         console.log('Person - ' + JSON.stringify(person));
         // pass the parsed object to "create()" method

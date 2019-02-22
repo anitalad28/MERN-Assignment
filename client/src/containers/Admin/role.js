@@ -43,32 +43,28 @@ class Role extends Component {
             RoleId: this.state.RoleId,
             RoleName: this.state.RoleName
         };
-        // alert (console.log (JSON.stringify (user)));
-
-        this.service
-            .createUserRole(role)
-            .then(data=>data.json())
-            .then(value => {
-                            console.log(JSON.stringify(value))
-                            })
-            .catch(error => console.log (error.status));
         
-        // const history = this.props.history;
-        // history.push ('/register');
+        this.service
+        .createUserRole(role)
+        .then(data=>data.json())
+        .then(value => {
+                        console.log(JSON.stringify(value))
+                        })
+        .catch(error => console.log (error.status));        
     }
 
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
-        let roles = this.service
-                        .getRoles()
-                        .then(data=>data.json())
-                        .then(value=>{
-                            this.setState({ Roles: value.data });                                                   
-                            console.log(JSON.stringify(value));
-                        })
-                        .catch(error=>{
-                            console.log(`Error occurred ${error.status}`);
-                        })
+        this.service
+                .getRoles()
+                .then(data=>data.json())
+                .then(value=>{
+                    this.setState({ Roles: value.data });                                                   
+                    console.log(JSON.stringify(value));
+                })
+                .catch(error=>{
+                    console.log(`Error occurred ${error.status}`);
+                })
     }
         
     render() { 
@@ -128,16 +124,6 @@ class Role extends Component {
 class TableHeader extends Component {   
     render() {
         return <th>{this.props.header}</th>;
-    }
-}
-
-// Componet that will render <option></option>
-// props.data is the data passed from the parent of this component
-class Options extends Component {
-    render(){
-        return(
-            <option value={this.props.data}>{this.props.data}</option>
-        );
     }
 }
 

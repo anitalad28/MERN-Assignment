@@ -22,16 +22,16 @@ export default class UserService {
             body: JSON.stringify(user)
         });
         return promise;
-    }
+    } 
 
-    getUsers() {
-        console.log ("In create User Service call");
-        let promise = fetch ('http://localhost:6060/api/users', {
+    getUserDetails(loggedInUserId) {
+        console.log ("In register personal info Service call" + JSON.stringify(loggedInUserId));
+        let promise = fetch ('http://localhost:6060/api/userDetails/' + loggedInUserId , {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
-            }           
+            }
         });
         return promise;
-    }
+    }  
 }

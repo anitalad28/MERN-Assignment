@@ -34,5 +34,6 @@ module.exports = {
             }
                 response.send({ status: 200, data: res });
         });
-    }
+    },
+  
 }

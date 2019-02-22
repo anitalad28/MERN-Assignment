@@ -33,20 +33,35 @@ module.exports = {
                 "UserName": request.body.UserName,
                 "EmailAddress": request.body.EmailAddress,
                 "Password": request.body.Password,
-                "Role": request.body.Role
+                "Role": request.body.Role,
+                "IsApproved": "U"
             };
+
         // pass the parsed object to "create()" method
         userModel.create(user, function(err, res) {
         if (err) {
             response.statusCode = 500;
             response.send(err);
         }
-        response.send({ status: 200, data: res });
+            response.send({ status: 200, data: res });
         });
     },
 
-    getUsers(request, response){ 
-        console.log('heres')   ;
+    checkUserName(request, response){
+         userModel.findOne({UserName:request.body.UserName}).exec(function(err, res) {
+            if (err) {                
+                response.send({ status: 500, error: err });
+            }
+            console.log(res);
+            if(res) {
+                response.send({ status: 200, message: "User name is available" });
+            } else {
+                response.send({ status: 404, message: "User name is not available" });
+            }
+        });   
+    },
+
+    getUsers(request, response){       
         userModel.find().exec(function(err, res) {
             if (err) {
                 response.statusCode = 500;
@@ -55,6 +70,35 @@ module.exports = {
                 response.send({ status: 200, data: res });
         });
     },
+
+    getUserDetails(request, response){ 
+        console.log('getUserDetails');
+         var UserId = request.params.userId;
+        userModel.find({ UserId : UserId },{IsApproved:1,_id:0}).exec(function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send({ status: response.statusCode, error: err });
+            }
+             console.log('res' + res );
+                response.send({ status: 200, data: res });
+        });
+    },
+
+    approveUser(request, response){ 
+        var UserId = request.params.userId;
+        var approveStatus = request.params.approvalStatus;
+         console.log(UserId);
+         console.log(approveStatus);
+        
+        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  approveStatus } }, function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send(err);
+            }
+
+            response.send({ status: 200, data: res });        
+        });
+    },    
 
     authenticateUser(request, response) {
         var user = {
@@ -70,14 +114,12 @@ module.exports = {
                console.log("Some error occurred");
                throw error;
             }
-            if(!usr){
+            if(!usr) {
                 response.send({
                     statusCode: 404,
-                    message: "Sorry! User is not availabe"
+                    message: "Sorry! You are unauthorized user"
                 });
-            } else { // Adminitrator or Operator
-                // If user is avilable but password do not match
-                // send the error
+            } else { 
                 console.log("In else if " + JSON.stringify(usr));
     
                 if( usr.Password != user.Password ) {
@@ -96,16 +138,11 @@ module.exports = {
                         authenticated: true,
                         message: "Login Success",
                         token: token,
-                        role: usr.Role
+                        role: usr.Role,
+                        uid:usr.UserId
                     });     
                 }
-            }
-            // } else {
-            //     response.send({
-            //         statusCode: 404,
-            //         message: "You don't have permission to create user."
-            //     }); 
-            // }
+            }            
         });
     },
 
