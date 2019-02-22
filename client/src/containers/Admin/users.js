@@ -138,9 +138,7 @@ class TableRow extends Component {
                     <input type="button" value={setApprovedButtonValue} className={buttonClass} onClick={this.onClickApprove.bind(this)} />
                 </td>
                 <td>
-                    <Link className="nav-link" to="/add-personal-info">
-                       Add User Personal Info
-                    </Link>
+                    <Link to={{ pathname: '/add-personal-info', state: { UserId: this.props.row.UserId} }}>Add Person Info</Link>
                 </td>                                     
             </tr>
         )

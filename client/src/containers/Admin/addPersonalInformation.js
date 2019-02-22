@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 
 class addPersonalInformation extends Component {
     constructor(props) {
-        super(props);
+        super(props);        
+        const {UserId} = props.location.state;
         this.state = { 
             PersonUniqueId: "0",
             FirstName: "",
@@ -26,9 +27,9 @@ class addPersonalInformation extends Component {
             MaritalStatues: ["Single","Married","Divorced","Widow","Widower"],
             EducationalStatues: ["Masters","Phd","Graduate","Under-Graduate", "SSC", "Illiterate", "HSC"],
             BirthSign: "",
-            loggedInUserId: ""        
+            loggedInUserId: UserId       
         };
-       
+
        this.service = new AdminService();     
     }
 
@@ -60,6 +61,7 @@ class addPersonalInformation extends Component {
     }
 
     onClickAddPersonalInfo = (e) => {
+        
         let personalInfo = {
             PersonUniqueId:  this.state.PersonUniqueId,
             FullName: {
@@ -84,7 +86,8 @@ class addPersonalInformation extends Component {
             MaritalStatus: this.state.MaritalStatus,
             EducationalStatus:  this.state.EducationalStatus,
             BirthSign: this.state.BirthSign,
-            loggedInUserId: sessionStorage.getItem("uid")       
+         //   loggedInUserId: sessionStorage.getItem("uid")    
+            loggedInUserId:  this.state.loggedInUserId       
         };
         
         this.service
