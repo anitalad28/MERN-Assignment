@@ -36,4 +36,16 @@ export default class UserService {
         });
         return promise;
     }  
+
+    getPersonalDetails(loggedInUserId) {
+        console.log ("In register personal info Service call" + JSON.stringify(loggedInUserId));
+        let promise = fetch ('http://localhost:6060/api/personaDetails/' + loggedInUserId , {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            }
+        });
+        return promise;
+    }
 }

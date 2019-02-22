@@ -13,7 +13,10 @@ class UserDashboard extends Component {
         return (            
             <div className='container'>                
                 <div className='col-5'>
-                    <h2>User Dashboard</h2><br /> 
+                    <div className='container'>
+                        <h2>User Dashboard</h2><br />
+                    </div>
+                     
                     <ViewPersonalInformation />
                 </div>
             </div>  

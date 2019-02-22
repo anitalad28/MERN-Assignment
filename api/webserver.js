@@ -152,7 +152,7 @@ instance.get("/api/userDetails/:userId", function(request, response) {
     }) 
 });
 
-var personalInfoRegistration = require("./routes/personalInfoDAL");
+var personalInfo = require("./routes/personalInfoDAL");
 
 instance.post("/api/personalInfo/registration", function(request, response) { 
     User.checkUserAuthentication( request, function( err, result ) {
@@ -162,13 +162,13 @@ instance.post("/api/personalInfo/registration", function(request, response) {
                 message: "Token verification failed after callback"
             });
         } else if( result ) {            
-           personalInfoRegistration.registerPersonalnfo(request, response);
+           personalInfo.registerPersonalnfo(request, response);
         }
     }) 
 });
 
-// api to get persons
-instance.get("/api/persons", function(request, response) {  
+// api to get person details
+instance.get("/api/personaDetails/:loggedInUserId", function(request, response) {  
     User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
@@ -176,7 +176,7 @@ instance.get("/api/persons", function(request, response) {
                 message: "Token verification failed after callback"
             });
         } else if( result ) {            
-            personRegistration.getPersons(request, response); 
+            personalInfo.getPersonalDetails(request, response); 
         }
     })         
 });
