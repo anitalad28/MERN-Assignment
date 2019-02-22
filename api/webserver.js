@@ -52,7 +52,7 @@ instance.post("/api/user/login", function(request, response) {
 
 // Verify the token and provide the access
 instance.get("/api/products", function(request, response) {  
-    checkUserAuthentication( request, function( err, result ) {
+    User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
                 success: false,
@@ -71,7 +71,7 @@ instance.get("/api/products", function(request, response) {
 });
 
 instance.post("/api/user/create", function(request, response) {
-    checkUserAuthentication( request, function( err, result ) {
+    User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
                 success: false,
@@ -84,7 +84,7 @@ instance.post("/api/user/create", function(request, response) {
 });
 
 instance.post("/api/user/checkUserName", function(request, response) {
-    checkUserAuthentication( request, function( err, result ) {
+    User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
                 success: false,
@@ -98,7 +98,7 @@ instance.post("/api/user/checkUserName", function(request, response) {
 
 var Admin = require("./routes/adminDAL");
 instance.post("/api/admin/createRole", function(request, response) {
-    checkUserAuthentication( request, function( err, result ) {
+    User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
                 success: false,
@@ -112,7 +112,7 @@ instance.post("/api/admin/createRole", function(request, response) {
 
 // api to get roles
 instance.get("/api/roles", function(request, response) {  
-    checkUserAuthentication( request, function( err, result ) {
+    User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
                 success: false,
@@ -121,48 +121,79 @@ instance.get("/api/roles", function(request, response) {
         } else if( result ) {            
            Admin.getRoles(request, response);
         }
-    })
-        
+    })        
 });
 
 // api to approve user
-instance.put("/api/user/approve/:userId/:approvalStatus", function(request, response) {      
-    User.approveUser(request, response);      
+instance.put("/api/user/approve/:userId/:approvalStatus", function(request, response) { 
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.approveUser(request, response); 
+        }
+    })       
 });
 
 
 instance.get("/api/userDetails/:userId", function(request, response) {
-    User.getUserDetails(request, response);
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.getUserDetails(request, response);
+        }
+    }) 
 });
 
 var personalInfoRegistration = require("./routes/personalInfoDAL");
 
 instance.post("/api/personalInfo/registration", function(request, response) { 
-  //console.log('REQUEST' + JSON.stringify(request));
-    personalInfoRegistration.registerPersonalnfo(request, response);
-    // User.checkUserAuthentication( request, function( err, result ) {
-    //     if(err){
-    //          response.send({
-    //             success: false,
-    //             message: "Token verification failed after callback"
-    //         });
-    //     } else if( result ) {            
-    //         console.log('Received Token');
-    //         personalInfoRegistration.registerPersonalnfo(request, response);
-    //     }
-    // }) 
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           personalInfoRegistration.registerPersonalnfo(request, response);
+        }
+    }) 
 });
 
 // api to get persons
 instance.get("/api/persons", function(request, response) {  
-    personRegistration.getPersons(request, response);      
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+            personRegistration.getPersons(request, response); 
+        }
+    })         
 });
 
 // api to get users
 instance.get("/api/users", function(request, response) {  
-    User.getUsers(request, response);      
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+            User.getUsers(request, response);
+        }
+    })
 });
-
 
 // 6. start listening
 instance.listen(6060, function() {

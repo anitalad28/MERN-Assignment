@@ -9,7 +9,8 @@ class ViewPersonalInformation extends Component {
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount() {        
         let loggedInUserId = sessionStorage.getItem("uid")  
-        
+        console.log("loggedInUserId" + JSON.stringify(sessionStorage));
+
         this.userService
           .getUserDetails(loggedInUserId)
           .then(data=>data.json())
@@ -26,14 +27,10 @@ class ViewPersonalInformation extends Component {
         
     render() { 
        return  (
-            <div className='container'> 
-                <OperatorHeader />
-                <br />
-                 <div className="container">
+            <div className='container'>
                     {this.state.IsApproved === 'U'
-                      ? 'You are not authorized to see details. Admin not approved yet.'
+                      ? 'You are not authorized to see details. Admin not approved you yet.'
                       : 'Personal Information'}
-                </div>                
             </div>     
         )               
     }

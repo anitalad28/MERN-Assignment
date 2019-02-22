@@ -13,7 +13,7 @@ class OperatorDashboard extends Component {
         return (
             <div className='container'>                
                 <div className='col-5'>                    
-                    <OperatorHeader />
+                    <OperatorHeader />                    
                  </div>       
             </div>     
         );         

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-//import PersonalInformation from './personalInformation';
+import ViewPersonalInformation from "./Admin/viewPersonalInformation";
+
 class UserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -10,9 +11,12 @@ class UserDashboard extends Component {
   
     render() { 
         return (            
-            <div className='container'> 
-                <h1>This is User Dashboard</h1> <br />
-            </div>     
+            <div className='container'>                
+                <div className='col-5'>
+                    <h2>User Dashboard</h2><br /> 
+                    <ViewPersonalInformation />
+                </div>
+            </div>  
         );         
     }
 }

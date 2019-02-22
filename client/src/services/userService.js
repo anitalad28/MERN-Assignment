@@ -17,7 +17,8 @@ export default class UserService {
         let promise = fetch ('http://localhost:6060/api/user/create', {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             },
             body: JSON.stringify(user)
         });
@@ -29,7 +30,8 @@ export default class UserService {
         let promise = fetch ('http://localhost:6060/api/userDetails/' + loggedInUserId , {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             }
         });
         return promise;

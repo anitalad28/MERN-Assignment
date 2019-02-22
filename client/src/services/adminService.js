@@ -1,11 +1,11 @@
-export default class UserService {
-    
+export default class UserService {    
     createUserRole(role) {
         console.log ("In Create User Role Service call");
         let promise = fetch ('http://localhost:6060/api/admin/createRole', {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             },
             body: JSON.stringify (role)
         });
@@ -54,7 +54,8 @@ export default class UserService {
         let promise = fetch ('http://localhost:6060/api/roles', {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             },
             body: JSON.stringify(user)
         });
@@ -66,7 +67,8 @@ export default class UserService {
         let promise = fetch ('http://localhost:6060/api/personalInfo/registration', {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             },
             body: JSON.stringify(personalInfo)
         });
@@ -78,10 +80,11 @@ export default class UserService {
         let promise = fetch("http://localhost:6060/api/user/checkUserName", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             },
                 body: JSON.stringify(username)
             });
-    return promise;
+        return promise;
   }   
 }
