@@ -37,11 +37,10 @@ class Login extends Component {
                             console.log(JSON.stringify(value));
 
                             const history = this.props.history;
-                            sessionStorage.setItem("token",value.token);
+                            sessionStorage.setItem("token",`"Bearer ${value.token}`);
                             sessionStorage.setItem("uid", value.uid);
                             sessionStorage.setItem("role", value.role);    
-
-                            //localStorage.setItem("token", `Bearer ${resp.token}`);
+                            
                             if (value.role === 'Admin') {
                                 history.push("/admin-dashboard");                               
                             } else if (value.role === 'Operator') {

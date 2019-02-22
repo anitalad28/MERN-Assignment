@@ -50,22 +50,79 @@ instance.post("/api/user/login", function(request, response) {
     User.authenticateUser(request, response);
 });
 
+// Verify the token and provide the access
+instance.get("/api/products", function(request, response) {  
+    checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+            productModel.find().exec(function(err, res) {
+                if (err) {
+                response.statusCode = 500;
+                response.send({ status: response.statusCode, error: err });
+                }
+                response.send({ status: 200, data: res });
+            });
+        }
+    }) 
+});
+
 instance.post("/api/user/create", function(request, response) {
-    User.createUser(request, response);
+    checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.createUser(request, response);
+        }
+    })
 });
 
 instance.post("/api/user/checkUserName", function(request, response) {
-    User.checkUserName(request, response);
+    checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+            User.checkUserName(request, response);
+        }
+    })    
 });
 
 var Admin = require("./routes/adminDAL");
 instance.post("/api/admin/createRole", function(request, response) {
-    Admin.createUserRole(request, response);
+    checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           Admin.createUserRole(request, response);
+        }
+    })
 });
 
 // api to get roles
 instance.get("/api/roles", function(request, response) {  
-    Admin.getRoles(request, response);      
+    checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           Admin.getRoles(request, response);
+        }
+    })
+        
 });
 
 // api to approve user

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AdminService from '../../services/adminService';
-import OperatorHeader from "./../Layouts/operatorHeader";
+import AdminHeader from "./../Layouts/adminHeader";
+import { Link } from "react-router-dom";
 
 class addPersonalInformation extends Component {
     constructor(props) {
@@ -99,7 +100,7 @@ class addPersonalInformation extends Component {
     render() { 
         return ( 
             <div className='container'> 
-                <OperatorHeader /> <br />               
+                <AdminHeader /> <br />               
                 <div className='col-5'>
                     <h2>Add Personal Information </h2> <br />
                     <div className='form-group'>                        
@@ -198,7 +199,10 @@ class addPersonalInformation extends Component {
                                         <input type='button' value='Reset' className='btn btn-default' onClick={this.onClickClear.bind(this)} />
                                     </td>
                                     <td>
-                                    <input type='button' value='Add Personal Information' className='btn btn-default btn-success' onClick={this.onClickAddPersonalInfo.bind(this)} />
+                                        <input type='button' value='Add Personal Information' className='btn btn-default btn-success' onClick={this.onClickAddPersonalInfo.bind(this)} />
+                                    </td>
+                                    <td>
+                                            <Link className="nav-link" to="/users"> Back to Users </Link>
                                     </td>
                                 </tr>
                             </tbody>

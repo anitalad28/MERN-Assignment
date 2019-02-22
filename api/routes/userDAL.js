@@ -148,6 +148,7 @@ module.exports = {
 
     checkUserAuthentication( request, callback) {     
        // Read request headers , headers contains bearer <token>
+       console.log(request.headers);
         var tokenReceived = request.headers.authorization.split(" ")[1];
         console.log('tokenReceived -- ' + tokenReceived  );
         

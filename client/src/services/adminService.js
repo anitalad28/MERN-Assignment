@@ -13,11 +13,12 @@ export default class UserService {
     }
 
     createUser(user) {
-        console.log ("In Create User Role Service call");
+        console.log ("In Create User Role Service call" + sessionStorage.getItem("token"));
         let promise = fetch ('http://localhost:6060/api/user/create', {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             },
             body: JSON.stringify(user)
         });
@@ -25,22 +26,24 @@ export default class UserService {
     }
 
     approveUser(userId, approvalStatus) {
-        console.log ("In Create User Role Service call");
+        console.log ("In Create User Role Service call" + + sessionStorage.getItem("token"));
         let promise = fetch('http://localhost:6060/api/user/approve/' + userId + '/' + approvalStatus, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             }
         });
         return promise;
     }
 
      getUsers() {
-        console.log ("In create User Service call");
+        console.log ("In get user's Service call" + sessionStorage.getItem("token"));
         let promise = fetch ('http://localhost:6060/api/users', {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
             }           
         });
         return promise;

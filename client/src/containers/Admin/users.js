@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AdminService from '../../services/adminService';
 import AdminHeader from "./../Layouts/adminHeader";
+import { Link } from "react-router-dom";
 
 class Users extends Component {
     constructor(props) {
@@ -13,7 +14,8 @@ class Users extends Component {
                 "Password": 0,
                 "Email Address": "",
                 "Role": "",
-                "Action": ""
+                "Action": "",
+                "": ""
               }
             ],
             headers: [],
@@ -115,11 +117,14 @@ class TableRow extends Component {
     render(){  
       const IsApproved = this.props.row.IsApproved;     
       let setApprovedButtonValue;
+      let buttonClass = "";
 
       if(IsApproved === "A") {
-        setApprovedButtonValue ="Approved"   
+        setApprovedButtonValue ="Approved";
+        buttonClass = "btn btn-success";
       } else {
-        setApprovedButtonValue = "Not Apporved"  
+        setApprovedButtonValue = "Rejected";
+        buttonClass = "btn btn-warning"  ;
       }
 
         return(
@@ -129,7 +134,14 @@ class TableRow extends Component {
                 <td>{this.props.row.Password}</td>
                 <td>{this.props.row.EmailAddress}</td>
                 <td>{this.props.row.Role}</td> 
-                <td><input type="button" value={setApprovedButtonValue} className="btn btn-warning" onClick={this.onClickApprove.bind(this)} /></td>                                   
+                <td>
+                    <input type="button" value={setApprovedButtonValue} className={buttonClass} onClick={this.onClickApprove.bind(this)} />
+                </td>
+                <td>
+                    <Link className="nav-link" to="/add-personal-info">
+                       Add User Personal Info
+                    </Link>
+                </td>                                     
             </tr>
         )
     }

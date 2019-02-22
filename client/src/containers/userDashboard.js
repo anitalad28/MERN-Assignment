@@ -11,8 +11,7 @@ class UserDashboard extends Component {
     render() { 
         return (            
             <div className='container'> 
-                <h1>This is User Dashboard</h1> <br />                    
-                             
+                <h1>This is User Dashboard</h1> <br />
             </div>     
         );         
     }
