@@ -32,29 +32,40 @@ class Users extends Component {
       }
     }
 
-    approveUser(user) {  
-        var setApprovalVar;
-        let userId = user._id;  
-        if( user.IsApproved === "A") {
-           setApprovalVar ="U";
-        } else {
-           setApprovalVar = "A";
-        }
-        
+    loadUsers(){
         this.adminService
-            .approveUser(userId, setApprovalVar)
+            .getAllPendingUsers()
+            .then(data => data.json())
+            .then(value => {
+                this.setState({ Users: value.data });                                                   
+                console.log(JSON.stringify(value));
+            })
+            .catch(error => {
+                console.log(`Error occurred ${error.status}`);
+            })
+    }
+
+    approveUser(user) {  
+        let userId = user._id;
+
+        this.adminService
+            .approveUser(userId)
             .then(data =>data.json())
             .then(value => {    
-                    this.adminService
-                        .getUsers()
-                        .then(data=>data.json())
-                        .then(value=>{
-                            this.setState({ Users: value.data });                                                   
-                            console.log(JSON.stringify(value));
-                        })
-                        .catch(error=>{
-                            console.log(`Error occurred ${error.status}`);
-                        })
+                    this.loadUsers()
+            })
+            .catch(error=>{
+                console.log(`Error occurred ${error.status}`);
+            })
+    }
+
+    rejectUser(user) {
+        let userId = user._id;
+        this.adminService
+            .rejectUser(userId)
+            .then(data =>data.json())
+            .then(value => {    
+                this.loadUsers()
             })
             .catch(error=>{
                 console.log(`Error occurred ${error.status}`);
@@ -65,7 +76,7 @@ class Users extends Component {
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
         this.adminService
-        .getUsers()
+        .getAllPendingUsers()
         .then(data=>data.json())
         .then(value=>{
             this.setState({ Users: value.data });                                                   
@@ -93,6 +104,7 @@ class Users extends Component {
                             {this.state.Users.map((prd, idx) => (
                                 <TableRow key={idx} row={prd}
                                 approve={this.approveUser.bind(this)}
+                                reject={this.rejectUser.bind(this)}
                                 />                               
                             ))}                        
                         </tbody>
@@ -114,19 +126,11 @@ class TableRow extends Component {
         this.props.approve(this.props.row);
     };
 
+    onClickReject(){
+        this.props.reject(this.props.row);
+    };
+
     render(){  
-      const IsApproved = this.props.row.IsApproved;     
-      let setApprovedButtonValue;
-      let buttonClass = "";
-
-      if(IsApproved === "A") {
-        setApprovedButtonValue ="Approved";
-        buttonClass = "btn btn-success";
-      } else {
-        setApprovedButtonValue = "Rejected";
-        buttonClass = "btn btn-warning"  ;
-      }
-
         return(
             <tr>
                 <td>{this.props.row.UserId}</td>
@@ -135,7 +139,8 @@ class TableRow extends Component {
                 <td>{this.props.row.EmailAddress}</td>
                 <td>{this.props.row.Role}</td> 
                 <td>
-                    <input type="button" value={setApprovedButtonValue} className={buttonClass} onClick={this.onClickApprove.bind(this)} />
+                    <input type="button" value="Approve" className="btn btn-warning" onClick={this.onClickApprove.bind(this)} />&nbsp;&nbsp;
+                    <input type="button" value="Reject" className="btn btn-danger" onClick={this.onClickReject.bind(this)} />
                 </td>
                 <td>
                     <Link to={{ pathname: '/add-personal-info', state: { UserId: this.props.row.UserId} }}>Add Person Info</Link>

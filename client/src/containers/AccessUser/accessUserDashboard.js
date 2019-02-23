@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ViewPersonalInformation from "./Admin/viewPersonalInformation";
+import ViewPersonalInformation from "../Admin/viewPersonalInformation";
 
-class UserDashboard extends Component {
+class AccessUserDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -15,8 +15,7 @@ class UserDashboard extends Component {
                 <div className='col-5'>
                     <div className='container'>
                         <h2>User Dashboard</h2><br />
-                    </div>
-                     
+                    </div>                     
                     <ViewPersonalInformation />
                 </div>
             </div>  
@@ -24,4 +23,4 @@ class UserDashboard extends Component {
     }
 }
  
-export default UserDashboard;
+export default AccessUserDashboard;

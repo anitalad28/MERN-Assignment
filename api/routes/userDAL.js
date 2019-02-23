@@ -34,7 +34,7 @@ module.exports = {
                 "EmailAddress": request.body.EmailAddress,
                 "Password": request.body.Password,
                 "Role": request.body.Role,
-                "IsApproved": "U"
+                "IsApproved": request.body.IsApproved
             };
 
         // pass the parsed object to "create()" method
@@ -71,6 +71,16 @@ module.exports = {
         });
     },
 
+    getPendingUsers(request, response){       
+        userModel.find({IsApproved:'P'}).exec(function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send({ status: response.statusCode, error: err });
+            }
+                response.send({ status: 200, data: res });
+        });
+    },
+
     getUserDetails(request, response){ 
         console.log('getUserDetails');
          var UserId = request.params.userId;
@@ -85,12 +95,11 @@ module.exports = {
     },
 
     approveUser(request, response){ 
-        var UserId = request.params.userId;
-        var approveStatus = request.params.approvalStatus;
-         console.log(UserId);
-         console.log(approveStatus);
+        var UserId = request.params.userId;       
+        //  console.log(UserId);
+        //  console.log(approveStatus);
         
-        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  approveStatus } }, function(err, res) {
+        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'A' } }, function(err, res) {
             if (err) {
                 response.statusCode = 500;
                 response.send(err);
@@ -98,7 +107,22 @@ module.exports = {
 
             response.send({ status: 200, data: res });        
         });
-    },    
+    }, 
+    
+    rejectUser(request, response){ 
+        var UserId = request.params.userId;        
+        //  console.log(UserId);
+        //  console.log(approveStatus);
+        
+        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'U' } }, function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send(err);
+            }
+
+            response.send({ status: 200, data: res });        
+        });
+    }, 
 
     authenticateUser(request, response) {
         var user = {

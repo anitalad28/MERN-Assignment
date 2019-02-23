@@ -125,7 +125,7 @@ instance.get("/api/roles", function(request, response) {
 });
 
 // api to approve user
-instance.put("/api/user/approve/:userId/:approvalStatus", function(request, response) { 
+instance.put("/api/user/approve/:userId", function(request, response) { 
     User.checkUserAuthentication( request, function( err, result ) {
         if(err){
              response.send({
@@ -134,6 +134,20 @@ instance.put("/api/user/approve/:userId/:approvalStatus", function(request, resp
             });
         } else if( result ) {            
            User.approveUser(request, response); 
+        }
+    })       
+});
+
+// api to reject user
+instance.put("/api/user/reject/:userId", function(request, response) { 
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.rejectUser(request, response); 
         }
     })       
 });
@@ -191,6 +205,20 @@ instance.get("/api/users", function(request, response) {
             });
         } else if( result ) {            
             User.getUsers(request, response);
+        }
+    })
+});
+
+// api to get users
+instance.get("/api/pendingusers", function(request, response) {  
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+            User.getPendingUsers(request, response);
         }
     })
 });

@@ -13,14 +13,15 @@ class User extends Component {
             IsApproved: "",
             isUserNameUniqueValue: false,
             Role: "AccessUser",
-            Roles: ["AccessUser", "Admin", "Operator"],
+            Roles: [],
             Users: [
               {
                 "User Id": 0,
                 "User Name": "",
                 "Password": 0,
                 "Email Address": "",
-                "Role": ""                
+                "Role": "",
+                "Status":""                
               }
             ],
             headers: [],
@@ -28,8 +29,8 @@ class User extends Component {
         
         this.adminService = new AdminService();        
         this.generateTableHeaders();
+        this.getUserRoles();
     }
-
     
     generateTableHeaders() {
       for (let h in this.state.Users[0]) {
@@ -63,21 +64,51 @@ class User extends Component {
         this.setState({ EmailAddress: "" });
         this.setState({ Role: "" });        
     }
+
+    getUserRoles(){
+        this.adminService
+            .getUserRoles()
+            .then(data => data.json())
+            .then(value => {                
+                this.setState({ Roles: value.data });                                                   
+                console.log('Roles' + JSON.stringify(value.data));
+            })
+            .catch(error => {
+                console.log(`Error occurred ${error.status}`);
+            })
+    }
+
+    loadUsers(){
+        this.adminService
+            .getUsers()
+            .then(data => data.json())
+            .then(value => {
+                this.setState({ Users: value.data });                                                   
+                console.log(JSON.stringify(value));
+            })
+            .catch(error => {
+                console.log(`Error occurred ${error.status}`);
+            })
+    }
     
     onClickCreateUser = (e) => {
         let user = {
             UserId: this.state.UserId,
             UserName: this.state.UserName,
-            Password: this.state.UserId,
+            Password: this.state.Password,
             EmailAddress: this.state.EmailAddress,
             Role: this.state.Role,
-            IsApproved: "U",
+            IsApproved: "P",
         };
       
         this.adminService
             .createUser(user)
             .then(data => data.json())
-            .then(value => {console.log(JSON.stringify(value)) })
+            .then(value => {
+                console.log(JSON.stringify(value));
+                this.loadUsers();
+                 
+            })
             .catch(error => console.log (error.status));
     }   
 
@@ -91,16 +122,7 @@ class User extends Component {
     
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
-        this.adminService
-        .getUsers()
-        .then(data => data.json())
-        .then(value => {
-            this.setState({ Users: value.data });                                                   
-            console.log(JSON.stringify(value));
-        })
-        .catch(error => {
-            console.log(`Error occurred ${error.status}`);
-        })
+        this.loadUsers();
     }
             
     render() { 
@@ -158,9 +180,10 @@ class User extends Component {
                                 name="Role" 
                                 value={this.state.Role} 
                                 onChange={this.onChangeUser.bind(this)}>
-                                    {this.state.Roles.map((c, i) => (
-                                        <Options key={i} data={c} />
-                                    ))}
+                                    {this.state.Roles.map((role, idx) => (
+                                        <Options key={idx} optionValue={role} />
+                                    ))}                         
+                              ))} 
                         </select>                         
                     </div>
                     <div className='form-group'>
@@ -198,8 +221,8 @@ class User extends Component {
                             </tr>
                         </thead>
                          <tbody>
-                            {this.state.Users.map((prd, idx) => (
-                                  <TableRow key={idx} row={prd}
+                            {this.state.Users.map((user, idx) => (
+                                  <TableRow key={idx} row={user}
                                     selected={this.getSelectedProduct.bind(this)}                                    
                                   />                               
                               ))}                        
@@ -219,8 +242,8 @@ class TableHeader extends Component {
 
 class Options extends Component {
     render(){
-        return(
-            <option value={this.props.data}>{this.props.data}</option>
+        return(            
+            <option value={this.props.optionValue.RoleId}>{this.props.optionValue.RoleName}</option>
         );
     }
 }
@@ -229,14 +252,26 @@ class TableRow extends Component{
     onRowClick(){
         this.props.selected(this.props.row);
     };
-    render(){        
+    render(){
+        const IsApproved = this.props.row.IsApproved;  
+        let userStatus = "";
+
+        if(IsApproved === "A") {
+            userStatus ="Approved";
+        } else if(IsApproved === "U") {
+            userStatus = "Rejected";            
+        } if(IsApproved === "P") {
+            userStatus = "Pending";  
+        }
+
         return(
             <tr onClick={this.onRowClick.bind(this)}>
                 <td>{this.props.row.UserId}</td>
                 <td>{this.props.row.UserName}</td>
                 <td>{this.props.row.Password}</td>
                 <td>{this.props.row.EmailAddress}</td>
-                <td>{this.props.row.Role}</td>                              
+                <td>{this.props.row.Role}</td>               
+                <td>{userStatus}</td>                              
             </tr>
         )
     }

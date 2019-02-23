@@ -22,7 +22,7 @@ module.exports = {
             response.statusCode = 500;
             response.send(err);
         }
-        response.send({ status: 200, data: res });
+            response.send({ status: 200, data: res });
         });
     },
 

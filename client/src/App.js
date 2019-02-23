@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-//import './App.css';
 import { Route, Router, Switch } from 'react-router-dom';
-import Login from './containers/login';
+import Login from './containers/Common/login';
 import AdminDashboard from './containers/Admin/adminDashboard';
-import UserDashboard from './containers/userDashboard';
-import OperatorDashboard from './containers/operatorDashboard';
+import UserDashboard from './containers/AccessUser/accessUserDashboard';
+import OperatorDashboard from './containers/Operator/operatorDashboard';
 import User from './containers/Admin/user';
 import Users from './containers/Admin/users';
 import Role from './containers/Admin/role';
 import AddPersonalInformation from './containers/Admin/addPersonalInformation';
 import ViewPersonalInformation from './containers/Admin/viewPersonalInformation';
 
-import Register from './containers/register';
+import Register from './containers/Common/register';
 
 import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();

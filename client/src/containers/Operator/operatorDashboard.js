@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import OperatorHeader from "./Layouts/operatorHeader";
+import OperatorHeader from "./../Layouts/operatorHeader";
 
 class OperatorDashboard extends Component {
     constructor(props) {

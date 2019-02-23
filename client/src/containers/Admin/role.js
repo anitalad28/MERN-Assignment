@@ -37,6 +37,18 @@ class Role extends Component {
         this.setState({ RoleName: "" });
     }
 
+    loadRoles(){
+        this.service
+            .getUserRoles()
+            .then(data=>data.json())
+            .then(value=>{
+                this.setState({ Roles: value.data });                                                   
+                console.log(JSON.stringify(value));
+            })
+            .catch(error=>{
+                console.log(`Error occurred ${error.status}`);
+            })
+    }
     //LOGIN SERVICE
     onClickCreateRole = (e) => {
         let role = {
@@ -47,24 +59,13 @@ class Role extends Component {
         this.service
         .createUserRole(role)
         .then(data=>data.json())
-        .then(value => {
-                        console.log(JSON.stringify(value))
-                        })
+        .then(value => { this.loadRoles(); })
         .catch(error => console.log (error.status));        
     }
 
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
-        this.service
-                .getRoles()
-                .then(data=>data.json())
-                .then(value=>{
-                    this.setState({ Roles: value.data });                                                   
-                    console.log(JSON.stringify(value));
-                })
-                .catch(error=>{
-                    console.log(`Error occurred ${error.status}`);
-                })
+        this.loadRoles();
     }
         
     render() { 

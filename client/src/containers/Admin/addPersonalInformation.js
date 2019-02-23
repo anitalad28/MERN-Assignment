@@ -14,7 +14,7 @@ class addPersonalInformation extends Component {
             LastName: "",
             Genders: ["Male","Female","Transgender"],
             DateOfBirth: "",
-            Age: "",
+            Age: "0",
             FlatBunglowNo: "",
             SocietyName: "",
             StreetAreaName: "",
@@ -33,9 +33,16 @@ class addPersonalInformation extends Component {
        this.service = new AdminService();     
     }
 
-    onChangeUser (e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
+    onChangeUser(e) {
+        if (e.target.name === "DateOfBirth") {
+          this.setState({
+            Age: new Date().getFullYear() - e.target.value.split("-")[0]
+          });
+        }
+        this.setState({
+          [e.target.name]: e.target.value
+        });
+      }
 
     //CLEAR 
     onClickClear (e) {
@@ -94,7 +101,9 @@ class addPersonalInformation extends Component {
             .registerPersonalInfo(personalInfo)
             .then(data=>data.json())
             .then(value => {
-                            console.log(JSON.stringify(value))
+                            console.log(JSON.stringify(value));
+                            const history = this.props.history;
+                            history.push("/users");
                             })
             .catch(error => console.log (error.status));        
     }
@@ -136,7 +145,7 @@ class addPersonalInformation extends Component {
                     </div>
                     <div className='form-group'>
                         <label htmlFor="Age">Age</label>
-                        <input type='text' name='Age' className='form-control' value={this.state.Age} onChange={this.onChangeUser.bind(this)} />
+                        <input type='text' name='Age' className='form-control' value={this.state.Age} onChange={this.onChangeUser.bind(this)} disabled />
                     </div>
                     <div className='form-group'>
                         <label htmlFor="FlatBunglowNo">Flat/Bunglow No</label>

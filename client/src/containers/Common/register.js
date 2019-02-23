@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserService from '../services/userService';
+import UserService from '../../services/userService';
 
 class Register extends Component {
     constructor(props) {

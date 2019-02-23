@@ -7,7 +7,7 @@ export default class UserService {
                 "Content-Type": "application/json",
                 "Authorization" : sessionStorage.getItem("token")
             },
-            body: JSON.stringify (role)
+            body: JSON.stringify(role)
         });
         return promise;
     }
@@ -25,9 +25,21 @@ export default class UserService {
         return promise;
     }
 
-    approveUser(userId, approvalStatus) {
+    approveUser(userId) {
         console.log ("In Create User Role Service call" + + sessionStorage.getItem("token"));
-        let promise = fetch('http://localhost:6060/api/user/approve/' + userId + '/' + approvalStatus, {
+        let promise = fetch('http://localhost:6060/api/user/approve/' + userId, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            }
+        });
+        return promise;
+    }
+
+    rejectUser(userId) {
+        console.log ("In Create User Role Service call" + + sessionStorage.getItem("token"));
+        let promise = fetch('http://localhost:6060/api/user/reject/' + userId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -49,15 +61,26 @@ export default class UserService {
         return promise;
     }
 
-     getRoles(user) {
+    getAllPendingUsers() {
+        console.log ("In get user's Service call" + sessionStorage.getItem("token"));
+        let promise = fetch ('http://localhost:6060/api/pendingusers', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            }           
+        });
+        return promise;
+    }
+
+     getUserRoles() {
         console.log ("In Create User Role Service call");
         let promise = fetch ('http://localhost:6060/api/roles', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization" : sessionStorage.getItem("token")
-            },
-            body: JSON.stringify(user)
+            }
         });
         return promise;
     }

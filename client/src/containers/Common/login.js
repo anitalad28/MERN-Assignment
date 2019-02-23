@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserService from '../services/userService';
+import UserService from '../../services/userService';
 
 class Login extends Component {
     constructor(props) {
@@ -7,8 +7,7 @@ class Login extends Component {
         this.state = { 
             Username: "",
             Password: ""           
-        };
-        // this.service = new LoginService ();
+        };        
         this.service = new UserService();
     }
 
