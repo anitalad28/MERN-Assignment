@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AdminService from '../../services/adminService';
+import ApiService from '../../services/apiService';
 import AdminHeader from "./../Layouts/adminHeader";
 
 class Role extends Component {
@@ -17,7 +17,7 @@ class Role extends Component {
             headers: [],           
         };
        
-        this.service = new AdminService();
+        this.service = new ApiService();
         this.generateTableHeaders();
     }
 

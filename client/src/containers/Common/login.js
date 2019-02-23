@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserService from '../../services/userService';
+import ApiService from '../../services/apiService';
 
 class Login extends Component {
     constructor(props) {
@@ -8,7 +8,7 @@ class Login extends Component {
             Username: "",
             Password: ""           
         };        
-        this.service = new UserService();
+        this.service = new ApiService();
     }
 
     onChangeUser (e) {
@@ -33,7 +33,7 @@ class Login extends Component {
             .loginUser(user)
             .then(data=>data.json())
             .then(value => {
-                            console.log(JSON.stringify(value));
+                            console.log("Logged in details: " + JSON.stringify(value));
 
                             const history = this.props.history;
                             sessionStorage.setItem("token",`"Bearer ${value.token}`);

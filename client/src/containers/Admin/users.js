@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AdminService from '../../services/adminService';
+import ApiService from '../../services/apiService';
 import AdminHeader from "./../Layouts/adminHeader";
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,7 @@ class Users extends Component {
             headers: [],
         };
               
-        this.adminService = new AdminService();
+        this.apiService = new ApiService();
         this.generateTableHeaders();
     }
 
@@ -33,7 +33,7 @@ class Users extends Component {
     }
 
     loadUsers(){
-        this.adminService
+        this.apiService
             .getAllPendingUsers()
             .then(data => data.json())
             .then(value => {
@@ -48,7 +48,7 @@ class Users extends Component {
     approveUser(user) {  
         let userId = user._id;
 
-        this.adminService
+        this.apiService
             .approveUser(userId)
             .then(data =>data.json())
             .then(value => {    
@@ -61,7 +61,7 @@ class Users extends Component {
 
     rejectUser(user) {
         let userId = user._id;
-        this.adminService
+        this.apiService
             .rejectUser(userId)
             .then(data =>data.json())
             .then(value => {    
@@ -75,7 +75,7 @@ class Users extends Component {
       
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
-        this.adminService
+        this.apiService
         .getAllPendingUsers()
         .then(data=>data.json())
         .then(value=>{

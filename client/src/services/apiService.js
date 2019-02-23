@@ -1,4 +1,54 @@
-export default class UserService {    
+export default class apiService {  
+    
+    loginUser(user) {
+        console.log ("In Login User Service call");
+        let promise = fetch ('http://localhost:6060/api/user/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        return promise;
+    }
+
+    createUser(user) {
+        console.log ("In create User Service call");
+        let promise = fetch ('http://localhost:6060/api/user/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            },
+            body: JSON.stringify(user)
+        });
+        return promise;
+    } 
+
+    getUserDetails(loggedInUserId) {
+        console.log ("In register personal info Service call" + JSON.stringify(loggedInUserId));
+        let promise = fetch ('http://localhost:6060/api/userDetails/' + loggedInUserId , {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            }
+        });
+        return promise;
+    }  
+
+    getPersonalDetails(loggedInUserId) {
+        console.log ("In register personal info Service call" + JSON.stringify(loggedInUserId));
+        let promise = fetch ('http://localhost:6060/api/personaDetails/' + loggedInUserId , {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            }
+        });
+        return promise;
+    }
+
     createUserRole(role) {
         console.log ("In Create User Role Service call");
         let promise = fetch ('http://localhost:6060/api/admin/createRole', {
@@ -38,7 +88,7 @@ export default class UserService {
     }
 
     rejectUser(userId) {
-        console.log ("In Create User Role Service call" + + sessionStorage.getItem("token"));
+        console.log ("In Create User Role Service call" + sessionStorage.getItem("token"));
         let promise = fetch('http://localhost:6060/api/user/reject/' + userId, {
             method: "PUT",
             headers: {
@@ -89,6 +139,19 @@ export default class UserService {
         console.log ("In register personal info Service call" + JSON.stringify(personalInfo));
         let promise = fetch ('http://localhost:6060/api/personalInfo/registration', {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            },
+            body: JSON.stringify(personalInfo)
+        });
+        return promise;
+    }
+
+    updatePersonalInfo(personalInfo, userId) {
+        console.log ("In update personal info Service call" + JSON.stringify(personalInfo));
+        let promise = fetch ('http://localhost:6060/api/personalInfo/update/' + userId , {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization" : sessionStorage.getItem("token")

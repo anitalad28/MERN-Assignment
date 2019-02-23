@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AdminService from '../../services/adminService';
+import ApiService from '../../services/apiService';
 import AdminHeader from "./../Layouts/adminHeader";
 
 class User extends Component {
@@ -27,7 +27,7 @@ class User extends Component {
             headers: [],
         };
         
-        this.adminService = new AdminService();        
+        this.apiService = new ApiService();        
         this.generateTableHeaders();
         this.getUserRoles();
     }
@@ -43,7 +43,7 @@ class User extends Component {
     }
 
     onCheckUserName(e) {     
-        this.adminService
+        this.apiService
             .isUserNameUnique({ UserName: e.target.value })
             .then(data => data.json())
             .then(value => {
@@ -66,7 +66,7 @@ class User extends Component {
     }
 
     getUserRoles(){
-        this.adminService
+        this.apiService
             .getUserRoles()
             .then(data => data.json())
             .then(value => {                
@@ -79,7 +79,7 @@ class User extends Component {
     }
 
     loadUsers(){
-        this.adminService
+        this.apiService
             .getUsers()
             .then(data => data.json())
             .then(value => {
@@ -101,7 +101,7 @@ class User extends Component {
             IsApproved: "P",
         };
       
-        this.adminService
+        this.apiService
             .createUser(user)
             .then(data => data.json())
             .then(value => {

@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
-import ViewPersonalInformation from "../Admin/viewPersonalInformation";
+import ViewPersonalInformation from "../Common/viewPersonalInformation";
 
 class AccessUserDashboard extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            
-        };        
+        this.state = { };        
     }
   
     render() { 
         return (            
-            <div className='container'>                
-                <div className='col-5'>
-                    <div className='container'>
-                        <h2>User Dashboard</h2><br />
-                    </div>                     
+            <div className='container'>               
+                <div className='col-8'>
                     <ViewPersonalInformation />
                 </div>
             </div>  

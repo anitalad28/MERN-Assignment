@@ -39,6 +39,34 @@ module.exports = {
         });
     },
 
+    updatePersonalnfo(request, response) {
+        // parsing posted data into JSON
+        var person = {
+            "PersonUniqueId": request.body.PersonUniqueId,
+            "FullName": request.body.FullName, 
+            "Gender": request.body.Gender,
+            "DateOfBirth": request.body.DateOfBirth,
+            "Age": request.body.Age,
+            "Address": request.body.Address,         
+            "PhoneNo": request.body.PhoneNo,
+            "MobileNo": request.body.MobileNo,
+            "PhysicalDisability": request.body.PhysicalDisability,
+            "MaritalStatus": request.body.MaritalStatus,
+            "EducationalStatus": request.body.EducationalStatus,
+            "BirthSign": request.body.BirthSign,
+            "loggedInUserId":  request.body.loggedInUserId
+        };
+        console.log('Update persona details - ' + JSON.stringify(person));
+        let UserId = request.params.userId;        
+        personalInfoModel.updateOne({ loggedInUserId : UserId },{ $set: person }, function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send(err);
+            }
+            response.send({ status: 200, data: res });
+        });
+    },
+
     getPersonalDetails(request, response) {
         let userId = request.params.loggedInUserId;
        

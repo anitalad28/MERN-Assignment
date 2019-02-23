@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import AdminService from '../../services/adminService';
-import AdminHeader from "./../Layouts/adminHeader";
-import { Link } from "react-router-dom";
+import ApiService from '../../services/apiService';
+import AdminHeader from "../Layouts/adminHeader";
+import AccessUserHeader from '../Layouts/accessUserheader';
+import OperatorDashboard from '../Operator/operatorDashboard';
 
-class addPersonalInformation extends Component {
+class editPersonalInformation extends Component {
     constructor(props) {
-        super(props);        
-        const {UserId} = props.location.state;
+        super(props);  
         this.state = { 
             PersonUniqueId: "0",
             FirstName: "",
@@ -27,10 +27,10 @@ class addPersonalInformation extends Component {
             MaritalStatues: ["Single","Married","Divorced","Widow","Widower"],
             EducationalStatues: ["Masters","Phd","Graduate","Under-Graduate", "SSC", "Illiterate", "HSC"],
             BirthSign: "",
-            loggedInUserId: UserId       
+            loggedInUserId: sessionStorage.getItem("uid")      
         };
 
-       this.service = new AdminService();     
+       this.service = new ApiService();     
     }
 
     onChangeUser(e) {
@@ -67,8 +67,7 @@ class addPersonalInformation extends Component {
         this.setState({ BirthSign: "" });
     }
 
-    onClickAddPersonalInfo = (e) => {
-        
+    onClickEditPersonalInfo = (e) => {        
         let personalInfo = {
             PersonUniqueId:  this.state.PersonUniqueId,
             FullName: {
@@ -92,29 +91,68 @@ class addPersonalInformation extends Component {
             PhysicalDisability: this.state.PhysicalDisability,
             MaritalStatus: this.state.MaritalStatus,
             EducationalStatus:  this.state.EducationalStatus,
-            BirthSign: this.state.BirthSign,
-         //   loggedInUserId: sessionStorage.getItem("uid")    
+            BirthSign: this.state.BirthSign,          
             loggedInUserId:  this.state.loggedInUserId       
         };
         
         this.service
-            .registerPersonalInfo(personalInfo)
+            .updatePersonalInfo(personalInfo, this.state.loggedInUserId )
             .then(data=>data.json())
             .then(value => {
                             console.log(JSON.stringify(value));
                             const history = this.props.history;
-                            history.push("/users");
+                            history.push("/view-personal-info");
                             })
             .catch(error => console.log (error.status));        
     }
 
+    //method weill be excuted immediatly after the render() completes its job
+    componentDidMount() {       
+        let loggedInUserId = sessionStorage.getItem("uid");        
+        this.service
+          .getPersonalDetails(loggedInUserId)
+          .then(data=>data.json())
+          .then(({ data })=>{
+            if(!data) {  return  }
+                console.log(data[0].FullName.FirstName);
+                this.setState({ PersonUniqueId: data[0].PersonUniqueId });
+                this.setState({ FirstName: data[0].FullName.FirstName });
+                this.setState({ MiddleName: data[0].FullName.MiddleName });
+                this.setState({ LastName: data[0].FullName.LastName });
+                this.setState({ Gender: data[0].Gender });
+                this.setState({ DateOfBirth: data[0].DateOfBirth });
+                this.setState({ Age: data[0].Age });
+                this.setState({ FlatBunglowNo: data[0].Address.FlatBunglowNo });
+                this.setState({ SocietyName: data[0].Address.SocietyName });
+                this.setState({ StreetAreaName: data[0].Address.StreetAreaName });
+                this.setState({ City: data[0].Address.City });
+                this.setState({ State: data[0].Address.State });
+                this.setState({ Pincode: data[0].Address.Pincode });
+                this.setState({ PhoneNo: data[0].PhoneNo });
+                this.setState({ MobileNo: data[0].MobileNo });
+                this.setState({ PhysicalDisability: data[0].PhysicalDisability });
+                this.setState({ MaritalStatus: data[0].MaritalStatues });
+                this.setState({ EducationalStatus: data[0].EducationalStatus });
+                this.setState({ BirthSign: data[0].BirthSign });
+          })
+          .catch(error => { console.log(`Error occurred ${error.status}`); })
+    }
 
     render() { 
+        let loggedInUserRole = sessionStorage.getItem("role");
+        var header;
+        if(loggedInUserRole === "Admin") {
+           header = <AdminHeader />
+        } else if(loggedInUserRole === "Operator") {
+           header = <OperatorDashboard />
+        } else {
+            header = <AccessUserHeader />  
+        }
         return ( 
             <div className='container'> 
-                <AdminHeader /> <br />               
+                {header} <br />               
                 <div className='col-5'>
-                    <h2>Add Personal Information </h2> <br />
+                    <h2>Edit Personal Information </h2> <br />
                     <div className='form-group'>                        
                         <label htmlFor="PersonUniqueId">Person Id</label>
                         <input type='text' name='PersonUniqueId' className='form-control' value={this.state.PersonUniqueId} onChange={this.onChangeUser.bind(this)} />
@@ -211,11 +249,8 @@ class addPersonalInformation extends Component {
                                         <input type='button' value='Reset' className='btn btn-default' onClick={this.onClickClear.bind(this)} />
                                     </td>
                                     <td>
-                                        <input type='button' value='Add Personal Information' className='btn btn-default btn-success' onClick={this.onClickAddPersonalInfo.bind(this)} />
-                                    </td>
-                                    <td>
-                                            <Link className="nav-link" to="/users"> Back to Users </Link>
-                                    </td>
+                                        <input type='button' value='Edit Personal Information' className='btn btn-default btn-success' onClick={this.onClickEditPersonalInfo.bind(this)} />
+                                    </td>                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -234,4 +269,4 @@ class Options extends Component {
     }
 }
  
-export default addPersonalInformation;
+export default editPersonalInformation;

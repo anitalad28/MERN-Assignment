@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserService from '../../services/userService';
+import ApiService from '../../services/apiService';
 
 class Register extends Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class Register extends Component {
             Password: "",
             EmailAddress: ""            
         };        
-        this.service = new UserService();
+        this.service = new ApiService();
     }
 
     onChangeUser (e) {

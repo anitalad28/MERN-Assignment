@@ -181,6 +181,19 @@ instance.post("/api/personalInfo/registration", function(request, response) {
     }) 
 });
 
+instance.put("/api/personalInfo/update/:userId", function(request, response) { 
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           personalInfo.updatePersonalnfo(request, response);
+        }
+    }) 
+});
+
 // api to get person details
 instance.get("/api/personaDetails/:loggedInUserId", function(request, response) {  
     User.checkUserAuthentication( request, function( err, result ) {
