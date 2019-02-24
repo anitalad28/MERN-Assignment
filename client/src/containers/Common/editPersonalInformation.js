@@ -36,13 +36,9 @@ class editPersonalInformation extends Component {
 
     onChangeUser(e) {
         if (e.target.name === "DateOfBirth") {
-          this.setState({
-            Age: new Date().getFullYear() - e.target.value.split("-")[0]
-          });
+          this.setState({ Age: new Date().getFullYear() - e.target.value.split("-")[0] });
         }
-        this.setState({
-          [e.target.name]: e.target.value
-        });
+        this.setState({ [e.target.name]: e.target.value });
       }
 
     //CLEAR 
@@ -175,7 +171,7 @@ class editPersonalInformation extends Component {
         return ( 
             <div className='container'> 
                 {header} <br />
-                {this.state.IsApproved === 'U'
+                {this.state.IsApproved === 'Unauthorized'
                     ? <div className='col-8'>  <br /> You are not authorized to see details. Admin has rejected your request.</div>
                     : <div className='container'>
                         <div className='col-8'>
@@ -275,12 +271,8 @@ class editPersonalInformation extends Component {
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <td>
-                                                        <input type='button' value='Reset' className='btn btn-default' onClick={this.onClickClear.bind(this)} />
-                                                    </td>
-                                                    <td>
-                                                        <input type='button' value='Edit Personal Information' className='btn btn-default btn-success' onClick={this.onClickEditPersonalInfo.bind(this)} />
-                                                    </td>                                    
+                                                    <td><input type='button' value='Reset' className='btn btn-default' onClick={this.onClickClear.bind(this)} /></td>
+                                                    <td><input type='button' value='Edit Personal Information' className='btn btn-default btn-success' onClick={this.onClickEditPersonalInfo.bind(this)} /></td>                                    
                                                 </tr>
                                             </tbody>
                                         </table>

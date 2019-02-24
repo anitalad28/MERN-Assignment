@@ -9,13 +9,13 @@ class Users extends Component {
         super(props);
         this.state = {                        
             Users: [{
-                "User Id": 0,
-                "User Name": "",
-                "Password": 0,
-                "Email Address": "",
-                "Role": "",
-                "Action": "",
-                "": ""
+                    "User Id": 0,
+                    "User Name": "",
+                    "Password": 0,
+                    "Email Address": "",
+                    "Role": "",
+                    "Action": "",
+                    "": ""
               }],
             headers: [],
         };
@@ -34,52 +34,29 @@ class Users extends Component {
         this.apiService
             .getAllPendingUsers()
             .then(data => data.json())
-            .then(value => {
-                this.setState({ Users: value.data });
-            })
-            .catch(error => {
-                console.log(`Error occurred ${error.status}`);
-            })
+            .then(value => { this.setState({ Users: value.data }); })
+            .catch(error => { console.log(`Error occurred ${error.status}`); })
     }
 
     approveUser(user) {  
-        let userId = user._id;
         this.apiService
-            .approveUser(userId)
+            .approveUser( user._id )
             .then(data =>data.json())
-            .then(value => {    
-                    this.loadUsers()
-            })
-            .catch(error=>{
-                console.log(`Error occurred ${error.status}`);
-            })
+            .then(value => { this.loadUsers() })
+            .catch(error => { console.log(`Error occurred ${error.status}`);  })
     }
 
-    rejectUser(user) {
-        let userId = user._id;
+    rejectUser(user) {       
         this.apiService
-            .rejectUser(userId)
+            .rejectUser(  user._id )
             .then(data =>data.json())
-            .then(value => {    
-                this.loadUsers()
-            })
-            .catch(error=>{
-                console.log(`Error occurred ${error.status}`);
-            })
+            .then(value => { this.loadUsers() })
+            .catch(error=>{ console.log(`Error occurred ${error.status}`); })
     }
 
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
-        this.apiService
-            .getAllPendingUsers()
-            .then(data=>data.json())
-            .then(value=>{
-                this.setState({ Users: value.data });                                                   
-                console.log(JSON.stringify(value));
-            })
-            .catch(error=>{
-                console.log(`Error occurred ${error.status}`);
-            })
+        this.loadUsers();
     }
         
     render() { 
@@ -97,9 +74,9 @@ class Users extends Component {
                         </thead>
                          <tbody>
                             {this.state.Users.map((user, idx) => (
-                                <TableRow   key={idx} row={user}
-                                            approve={this.approveUser.bind(this)}
-                                            reject={this.rejectUser.bind(this)} />                               
+                                <TableRow   key = {idx} row = {user}
+                                            approve = {this.approveUser.bind(this)}
+                                            reject = {this.rejectUser.bind(this)} />                               
                             ))}                        
                         </tbody>
                     </table>
@@ -119,9 +96,8 @@ class TableRow extends Component {
     };
    
     render(){
-        const IsPersonalInfo = this.props.row.PersonalInfo;  
         var setLink = "";
-        if( IsPersonalInfo === true ) {
+        if( this.props.row.PersonalInfo ) {
             setLink = <td> <Link to={{ pathname: '/edit-personal-info', state: { UserId: this.props.row.UserId} }}>Edit Person Info |</Link> <Link to={{ pathname: '/view-personal-info', state: { UserId: this.props.row.UserId} }}>View Person Info</Link></td> 
         } else {
             setLink = setLink = <td> <Link to={{ pathname: '/add-personal-info', state: { UserId: this.props.row.UserId} }}>Add Person Info</Link> </td>

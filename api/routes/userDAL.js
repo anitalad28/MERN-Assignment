@@ -27,44 +27,23 @@ instance.set("jwtSecret", jwtSettings.jwtSecret);
 
 module.exports = {
     createUser(request, response){
-            // parsing posted data into JSON
-            let user = request.body;
-            // var user = {
-            //     "UserId": request.body.UserId,
-            //     "UserName": request.body.UserName,
-            //     "EmailAddress": request.body.EmailAddress,
-            //     "Password": request.body.Password,
-            //     "Role": request.body.Role,
-            //     "IsApproved": request.body.IsApproved
-            // };
-
-        // pass the parsed object to "create()" method
+        let user = request.body;
         userModel.create(user, function(err, res) {
-        if (err) {
-            response.statusCode = 500;
-            response.send(err);
-        }
+            if (err) {           
+                response.send({ status: 500, error: err });
+            }
             response.send({ status: 200, data: res });
         });
     },
 
     updateUser(request, response){
-        userId = request.params.UserId
-        var user = {
-            "UserId": request.body.UserId,
-            "UserName": request.body.UserName,
-            "EmailAddress": request.body.EmailAddress,
-            "Password": request.body.Password,
-            "Role": request.body.Role,
-            "IsApproved": request.body.IsApproved
-        };
+        let userId = request.params.UserId
+        let user = request.body;
 
-        // pass the parsed object to "create()" method
-        userModel.updateOne({UserId:userId},{$set: user }, function(err, res) {
-        if (err) {
-            response.statusCode = 500;
-            response.send(err);
-        }
+        userModel.updateOne({ UserId:userId },{ $set: user }, function(err, res) {
+            if (err) {
+                response.send({ status: 500, error: err });
+            }
             response.send({ status: 200, data: res });
         });
     },
@@ -73,8 +52,7 @@ module.exports = {
          userModel.findOne({UserName:request.body.UserName}).exec(function(err, res) {
             if (err) {                
                 response.send({ status: 500, error: err });
-            }
-            console.log(res);
+            }            
             if(res) {
                 response.send({ status: 200, message: "User name is available" });
             } else {
@@ -86,90 +64,73 @@ module.exports = {
     getUsers(request, response){       
         userModel.find().exec(function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send({ status: response.statusCode, error: err });
+                response.send({ status: 500, error: err });
             }
-                response.send({ status: 200, data: res });
+            response.send({ status: 200, data: res });
         });
     },
 
     getPendingUsers(request, response){       
-        userModel.find({IsApproved:'P'}).exec(function(err, res) {
+        userModel.find({ IsApproved:'Pending' }).exec(function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send({ status: response.statusCode, error: err });
+                response.send({ status: 500, error: err });
             }
-                response.send({ status: 200, data: res });
+            response.send({ status: 200, data: res });
         });
     },
 
-    getUserDetails(request, response){ 
-        console.log('getUserDetails');
-         var UserId = request.params.userId;
+    getUserDetails(request, response) {
+        let UserId = request.params.userId;
         userModel.find({ UserId : UserId }).exec(function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send({ status: response.statusCode, error: err });
-            }
-             console.log('res' + res );
-                response.send({ status: 200, data: res });
+                response.send({ status: 500, error: err });
+            }             
+            response.send({ status: 200, data: res });
         });
     },
 
-    approveUser(request, response){ 
-        var UserId = request.params.userId;           
-        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'A' } }, function(err, res) {
+    approveUser(request, response) { 
+        let UserId = request.params.userId;           
+        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'Approved' } }, function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send(err);
+                response.send({ status: 500, error: err });
             }
-
             response.send({ status: 200, data: res });        
         });
     }, 
     
     rejectUser(request, response){ 
-        var UserId = request.params.userId;        
-        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'U' } }, function(err, res) {
+        let UserId = request.params.userId;        
+        userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'Unauthorized' } }, function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send(err);
+                response.send({ status: 500, error: err });
             }
             response.send({ status: 200, data: res });        
         });
     },
 
     updateUserPersonalInfoStatus(request, response){ 
-        var UserId = request.params.userId;        
+        let UserId = request.params.userId;        
         userModel.updateOne({ UserId : UserId },{ $set: { PersonalInfo : true } }, function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send(err);
+                response.send({ status: 500, error: err });
             }
             response.send({ status: 200, data: res });        
         });
     },
     
     pendingUser(request, response){ 
-        var UserId = request.params.userId;        
-        userModel.updateOne({ UserId : UserId },{ $set: { IsApproved :  'P' } }, function(err, res) {
+        let UserId = request.params.userId;        
+        userModel.updateOne({ UserId : UserId },{ $set: { IsApproved :  'Pending' } }, function(err, res) {
             if (err) {
-                response.statusCode = 500;
-                response.send(err);
+                response.send({ status: 500, error: err });
             }
             response.send({ status: 200, data: res });        
         });
     },
 
     authenticateUser(request, response) {
-        var user = {
-            UserName: request.body.Username,
-            Password: request.body.Password
-        };
-    
-        console.log("In authenticate user: " + JSON.stringify(user));
-    
-        // pass the parsed object to "create()" method
+        let user = request.body; 
         userModel.findOne({ UserName: request.body.Username }, function(err, usr) {
             if (err) {
                console.log("Some error occurred");
@@ -177,15 +138,13 @@ module.exports = {
             }
             if(!usr) {
                 response.send({
-                    statusCode: 404,
+                    status: 404,
                     message: "Sorry! You are unauthorized user"
                 });
-            } else { 
-                console.log("In else if " + JSON.stringify(usr));
-    
+            } else {     
                 if( usr.Password != user.Password ) {
                     response.send({
-                        statusCode: 404,
+                        status: 404,
                         message: "Sorry! Username and passsword do not match"
                     }); 
                 } else {
@@ -196,22 +155,19 @@ module.exports = {
                     //save token globally
                     tokenStore = token;
                     response.send({
-                        authenticated: true,
-                        message: "Login Success",
-                        token: token,
-                        role: usr.Role,
-                        uid:usr.UserId
+                            authenticated: true,
+                            message: "Login Success",
+                            token: token,
+                            role: usr.Role,
+                            uid:usr.UserId
                     });     
                 }
             }            
         });
     },
 
-    checkUserAuthentication( request, callback) {     
-       // Read request headers , headers contains bearer <token>
-       console.log(request.headers);
-        var tokenReceived = request.headers.authorization.split(" ")[1];
-        console.log('tokenReceived -- ' + tokenReceived  );
+    checkUserAuthentication( request, callback) {       
+        let tokenReceived = request.headers.authorization.split(" ")[1];
         
        jwt.verify( tokenReceived, instance.get("jwtSecret"), function( err, decoded ){
            console.log("In verify call back function");

@@ -30,7 +30,6 @@ class Role extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    //CLEAR 
     onClickClear (e) {
         this.setState({ RoleId: "" });
         this.setState({ RoleName: "" });
@@ -39,16 +38,11 @@ class Role extends Component {
     loadRoles(){
         this.service
             .getUserRoles()
-            .then(data=>data.json())
-            .then(value=>{
-                this.setState({ Roles: value.data });                                                   
-                console.log(JSON.stringify(value));
-            })
-            .catch(error=>{
-                console.log(`Error occurred ${error.status}`);
-            })
+            .then(data => data.json())
+            .then(value => { this.setState({ Roles: value.data }); })
+            .catch(error => { console.log(`Error occurred ${error.status}`); })
     }
-    //LOGIN SERVICE
+
     onClickCreateRole = (e) => {
         let role = {
             RoleId: this.state.RoleId,
@@ -56,14 +50,13 @@ class Role extends Component {
         };
         
         this.service
-        .createUserRole(role)
-        .then(data=>data.json())
-        .then(value => { this.loadRoles(); })
-        .catch(error => console.log (error.status));        
+            .createUserRole(role)
+            .then(data=>data.json())
+            .then(value => { this.loadRoles(); })
+            .catch(error => console.log (error.status));        
     }
 
-    //method weill be excuted immediatly after the render() completes its job
-    componentDidMount(){
+    componentDidMount() {
         this.loadRoles();
     }
         
@@ -85,12 +78,8 @@ class Role extends Component {
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <input type='button' value='Clear' className='btn btn-default' onClick={ this.onClickClear.bind(this) } />
-                                    </td>
-                                    <td>
-                                        <input type='button' value='Add Role' className='btn btn-default btn-success' onClick={this.onClickCreateRole.bind(this)} />
-                                    </td>
+                                    <td><input type='button' value='Clear' className='btn btn-default' onClick={ this.onClickClear.bind(this) } /></td>
+                                    <td><input type='button' value='Add Role' className='btn btn-default btn-success' onClick={this.onClickCreateRole.bind(this)} /></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -98,33 +87,28 @@ class Role extends Component {
                      <div className="container">
                         <table className="table table-bordered table-striped">
                             <thead>
-                                <tr>
+                                <tr> 
                                     {this.state.headers.map((h, i) => 
-                                            ( <TableHeader key={i} header={h} /> )
-                                        )}
+                                    ( <TableHeader key={i} header={h} /> ) )}
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.Roles.map((prd, idx) => (
-                                    <TableRow key={idx} row={prd}/>                               
-                                ))}                        
+                                    {this.state.Roles.map((prd, idx) => (
+                                        <TableRow key={idx} row={prd}/>                               
+                                    ))}                        
                             </tbody>
                         </table>
                     </div>
-                </div>                
+                </div>
             </div>     
         );         
     }
 }
 
-class TableRow extends Component{
-    onRowClick(){
-        this.props.selected(this.props.row);
-    };
-
-    render(){        
-        return(
-            <tr onClick={this.onRowClick.bind(this)}>
+class TableRow extends Component{   
+    render() {        
+        return (
+            <tr>
                 <td>{this.props.row.RoleId}</td>
                 <td>{this.props.row.RoleName}</td>                  
             </tr>

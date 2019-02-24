@@ -40,21 +40,16 @@ class addPersonalInformation extends Component {
             .updatePersonalInfoStatus(userId)
             .then(data=>data.json())
             .then(value => {})
-            .catch(error => console.log (error.status));
+            .catch(error => console.log(error.status));
     }
 
     onChangeUser(e) {
         if (e.target.name === "DateOfBirth") {
-          this.setState({
-            Age: new Date().getFullYear() - e.target.value.split("-")[0]
-          });
+          this.setState({  Age: new Date().getFullYear() - e.target.value.split("-")[0] });
         }
-        this.setState({
-          [e.target.name]: e.target.value
-        });
+        this.setState({ [e.target.name]: e.target.value });
       }
 
-    //CLEAR 
     onClickClear (e) {
         this.setState({ PersonUniqueId: "0" });
         this.setState({ FirstName: "" });
@@ -80,22 +75,22 @@ class addPersonalInformation extends Component {
     onClickAddPersonalInfo = (e) => {        
         let personalInfo = {
             PersonUniqueId:  this.state.PersonUniqueId,
-            FullName: {
-                FirstName: this.state.FirstName,
-                MiddleName: this.state.MiddleName,
-                LastName: this.state.LastName,
-            },            
+            FullName:{ 
+                        FirstName: this.state.FirstName, 
+                        MiddleName: this.state.MiddleName,
+                        LastName: this.state.LastName 
+                    },            
             Gender: this.state.Gender,
             DateOfBirth: this.state.DateOfBirth,
             Age: this.state.Age,
-            Address:{
-                FlatBunglowNo: this.state.FlatBunglowNo,
-                SocietyName: this.state.SocietyName,
-                StreetAreaName: this.state.StreetAreaName,
-                City: this.state.City,
-                State: this.state.State,
-                Pincode: this.state.Pincode,
-            },            
+            Address:{ 
+                        FlatBunglowNo: this.state.FlatBunglowNo, 
+                        SocietyName: this.state.SocietyName, 
+                        StreetAreaName: this.state.StreetAreaName, 
+                        City: this.state.City, 
+                        State: this.state.State, 
+                        Pincode: this.state.Pincode 
+                    },            
             PhoneNo: this.state.PhoneNo,
             MobileNo: this.state.MobileNo,
             PhysicalDisability: this.state.PhysicalDisability,
@@ -108,21 +103,18 @@ class addPersonalInformation extends Component {
         this.service
             .registerPersonalInfo(personalInfo)
             .then(data=>data.json())
-            .then(value => {
-                            console.log(JSON.stringify(value));
-                            this.updatePersonalInfoStatus();
-                            const history = this.props.history;
-                            history.push("/users");
-                            })
-            .catch(error => console.log (error.status));        
-    }
+            .then(value => { this.updatePersonalInfoStatus();})
+            .catch(error => console.log (error.status));
 
+            const history = this.props.history;
+             history.push("/users");    
+    }
 
     render() { 
         return ( 
             <div className='container'> 
                 <AdminHeader /> <br />               
-                <div className='col-5'>
+                <div className='col-8'>
                     <h2>Add Personal Information </h2> <br />
                     <div className='form-group'>                        
                         <label htmlFor="PersonUniqueId">Person Id</label>
@@ -216,15 +208,9 @@ class addPersonalInformation extends Component {
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <input type='button' value='Reset' className='btn btn-default' onClick={this.onClickClear.bind(this)} />
-                                    </td>
-                                    <td>
-                                        <input type='button' value='Add Personal Information' className='btn btn-default btn-success' onClick={this.onClickAddPersonalInfo.bind(this)} />
-                                    </td>
-                                    <td>
-                                            <Link className="nav-link" to="/users"> Back to Users </Link>
-                                    </td>
+                                    <td><input type='button' value='Reset' className='btn btn-default' onClick={this.onClickClear.bind(this)} /></td>
+                                    <td><input type='button' value='Add Personal Information' className='btn btn-default btn-success' onClick={this.onClickAddPersonalInfo.bind(this)} /> </td>
+                                    <td><Link className="nav-link" to="/users"> Back to Users </Link></td>
                                 </tr>
                             </tbody>
                         </table>

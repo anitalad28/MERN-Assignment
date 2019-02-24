@@ -73,7 +73,7 @@ class ViewPersonalInformation extends Component {
        return  (
             <div className='container'>
                     {header}
-                    {this.state.IsApproved === 'U'
+                    {this.state.IsApproved === 'Unauthorized'
                       ? <div className='col-8'> <br /> You are not authorized to see details. Admin has rejected your request.</div>
                       : <div className='container'><br />
                             <h2> User Information</h2><br /> 
