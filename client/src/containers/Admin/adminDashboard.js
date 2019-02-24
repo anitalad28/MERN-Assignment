@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AdminHeader from "./../Layouts/adminHeader";
+import Users from "./users";
 
 class AdminDashboard extends Component {
     constructor(props) {
@@ -9,8 +9,8 @@ class AdminDashboard extends Component {
   
     render() { 
         return (
-           <div className='container'>                              
-             <AdminHeader />            
+           <div className='container'>   
+             <Users />            
           </div>    
         );         
     }

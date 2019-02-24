@@ -4,9 +4,7 @@ import OperatorHeader from "./../Layouts/operatorHeader";
 class OperatorDashboard extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            
-        };        
+        this.state = { };        
     }
   
     render() { 

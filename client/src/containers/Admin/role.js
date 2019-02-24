@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ApiService from '../../services/apiService';
 import AdminHeader from "./../Layouts/adminHeader";
+import TableHeader from "../../components/TableHeader";
 
 class Role extends Component {
     constructor(props) {
@@ -8,12 +9,10 @@ class Role extends Component {
         this.state = { 
             RoleId: "",
             RoleName: "",
-            Roles: [
-              {
-                "Role Id": 0,
-                "Role Name": ""               
-              }
-            ],
+            Roles: [{
+                        "Role Id": 0,
+                        "Role Name": ""               
+                    }],
             headers: [],           
         };
        
@@ -90,7 +89,7 @@ class Role extends Component {
                                         <input type='button' value='Clear' className='btn btn-default' onClick={ this.onClickClear.bind(this) } />
                                     </td>
                                     <td>
-                                    <input type='button' value='Add Role' className='btn btn-default btn-success' onClick={this.onClickCreateRole.bind(this)} />
+                                        <input type='button' value='Add Role' className='btn btn-default btn-success' onClick={this.onClickCreateRole.bind(this)} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -100,18 +99,14 @@ class Role extends Component {
                         <table className="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    {
-                                        this.state.headers.map((h, i) => 
+                                    {this.state.headers.map((h, i) => 
                                             ( <TableHeader key={i} header={h} /> )
-                                        )
-                                    }
+                                        )}
                                 </tr>
                             </thead>
                             <tbody>
                                 {this.state.Roles.map((prd, idx) => (
-                                    <TableRow key={idx} row={prd}
-                                                                        
-                                    />                               
+                                    <TableRow key={idx} row={prd}/>                               
                                 ))}                        
                             </tbody>
                         </table>
@@ -119,12 +114,6 @@ class Role extends Component {
                 </div>                
             </div>     
         );         
-    }
-}
-
-class TableHeader extends Component {   
-    render() {
-        return <th>{this.props.header}</th>;
     }
 }
 

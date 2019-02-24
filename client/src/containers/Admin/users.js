@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import ApiService from '../../services/apiService';
 import AdminHeader from "./../Layouts/adminHeader";
 import { Link } from "react-router-dom";
+import TableHeader from "../../components/TableHeader.jsx";
 
 class Users extends Component {
     constructor(props) {
         super(props);
         this.state = {                        
-            Users: [
-              {
+            Users: [{
                 "User Id": 0,
                 "User Name": "",
                 "Password": 0,
@@ -16,15 +16,13 @@ class Users extends Component {
                 "Role": "",
                 "Action": "",
                 "": ""
-              }
-            ],
+              }],
             headers: [],
         };
               
         this.apiService = new ApiService();
         this.generateTableHeaders();
     }
-
     
     generateTableHeaders() {
       for (let h in this.state.Users[0]) {
@@ -37,8 +35,7 @@ class Users extends Component {
             .getAllPendingUsers()
             .then(data => data.json())
             .then(value => {
-                this.setState({ Users: value.data });                                                   
-                console.log(JSON.stringify(value));
+                this.setState({ Users: value.data });
             })
             .catch(error => {
                 console.log(`Error occurred ${error.status}`);
@@ -47,7 +44,6 @@ class Users extends Component {
 
     approveUser(user) {  
         let userId = user._id;
-
         this.apiService
             .approveUser(userId)
             .then(data =>data.json())
@@ -72,19 +68,18 @@ class Users extends Component {
             })
     }
 
-      
     //method weill be excuted immediatly after the render() completes its job
     componentDidMount(){
         this.apiService
-        .getAllPendingUsers()
-        .then(data=>data.json())
-        .then(value=>{
-            this.setState({ Users: value.data });                                                   
-            console.log(JSON.stringify(value));
-        })
-        .catch(error=>{
-            console.log(`Error occurred ${error.status}`);
-        })
+            .getAllPendingUsers()
+            .then(data=>data.json())
+            .then(value=>{
+                this.setState({ Users: value.data });                                                   
+                console.log(JSON.stringify(value));
+            })
+            .catch(error=>{
+                console.log(`Error occurred ${error.status}`);
+            })
     }
         
     render() { 
@@ -101,11 +96,10 @@ class Users extends Component {
                             </tr>
                         </thead>
                          <tbody>
-                            {this.state.Users.map((prd, idx) => (
-                                <TableRow key={idx} row={prd}
-                                approve={this.approveUser.bind(this)}
-                                reject={this.rejectUser.bind(this)}
-                                />                               
+                            {this.state.Users.map((user, idx) => (
+                                <TableRow   key={idx} row={user}
+                                            approve={this.approveUser.bind(this)}
+                                            reject={this.rejectUser.bind(this)} />                               
                             ))}                        
                         </tbody>
                     </table>
@@ -115,22 +109,23 @@ class Users extends Component {
     }
 }
 
-class TableHeader extends Component {   
-    render() {
-      return <th>{this.props.header}</th>;
-    }
-  }
-
 class TableRow extends Component {
     onClickApprove(){
-        this.props.approve(this.props.row);
+        this.props.approve(this.props.row);        
     };
 
     onClickReject(){
         this.props.reject(this.props.row);
     };
-
-    render(){  
+   
+    render(){
+        const IsPersonalInfo = this.props.row.PersonalInfo;  
+        var setLink = "";
+        if( IsPersonalInfo === true ) {
+            setLink = <td> <Link to={{ pathname: '/edit-personal-info', state: { UserId: this.props.row.UserId} }}>Edit Person Info |</Link> <Link to={{ pathname: '/view-personal-info', state: { UserId: this.props.row.UserId} }}>View Person Info</Link></td> 
+        } else {
+            setLink = setLink = <td> <Link to={{ pathname: '/add-personal-info', state: { UserId: this.props.row.UserId} }}>Add Person Info</Link> </td>
+        }
         return(
             <tr>
                 <td>{this.props.row.UserId}</td>
@@ -142,9 +137,7 @@ class TableRow extends Component {
                     <input type="button" value="Approve" className="btn btn-warning" onClick={this.onClickApprove.bind(this)} />&nbsp;&nbsp;
                     <input type="button" value="Reject" className="btn btn-danger" onClick={this.onClickReject.bind(this)} />
                 </td>
-                <td>
-                    <Link to={{ pathname: '/add-personal-info', state: { UserId: this.props.row.UserId} }}>Add Person Info</Link>
-                </td>                                     
+                {setLink}                                     
             </tr>
         )
     }

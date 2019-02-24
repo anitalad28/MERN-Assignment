@@ -17,7 +17,11 @@ const AdminHeader = function() {
                         New User |
                       </Link>
                     </li>
-                    
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/persons">
+                        Persons |
+                      </Link>
+                    </li>                    
                     <li className="nav-item">
                       <Link className="nav-link" to="/create-role">
                         Roles |

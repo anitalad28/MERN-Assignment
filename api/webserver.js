@@ -83,6 +83,33 @@ instance.post("/api/user/create", function(request, response) {
     })
 });
 
+instance.put("/api/user/update/:UserId", function(request, response) {
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.updateUser(request, response);
+        }
+    })
+});
+
+instance.put("/api/user/PerosnalInfoStatus/:userId", function(request, response) {
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.updateUserPersonalInfoStatus(request, response);
+        }
+    })
+});
+
+
 instance.post("/api/user/checkUserName", function(request, response) {
     User.checkUserAuthentication( request, function( err, result ) {
         if(err){
@@ -148,6 +175,20 @@ instance.put("/api/user/reject/:userId", function(request, response) {
             });
         } else if( result ) {            
            User.rejectUser(request, response); 
+        }
+    })       
+});
+
+// api to set user as pending user
+instance.put("/api/user/pending/:userId", function(request, response) { 
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+           User.pendingUser(request, response); 
         }
     })       
 });

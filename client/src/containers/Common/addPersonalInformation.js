@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ApiService from '../../services/apiService';
 import AdminHeader from "../Layouts/adminHeader";
 import { Link } from "react-router-dom";
+import Options from "../../components/optionComponent";
 
 class addPersonalInformation extends Component {
     constructor(props) {
@@ -31,6 +32,15 @@ class addPersonalInformation extends Component {
         };
 
        this.service = new ApiService();     
+    }
+
+    updatePersonalInfoStatus(){
+        let userId = this.state.loggedInUserId;
+        this.service
+            .updatePersonalInfoStatus(userId)
+            .then(data=>data.json())
+            .then(value => {})
+            .catch(error => console.log (error.status));
     }
 
     onChangeUser(e) {
@@ -67,8 +77,7 @@ class addPersonalInformation extends Component {
         this.setState({ BirthSign: "" });
     }
 
-    onClickAddPersonalInfo = (e) => {
-        
+    onClickAddPersonalInfo = (e) => {        
         let personalInfo = {
             PersonUniqueId:  this.state.PersonUniqueId,
             FullName: {
@@ -93,7 +102,6 @@ class addPersonalInformation extends Component {
             MaritalStatus: this.state.MaritalStatus,
             EducationalStatus:  this.state.EducationalStatus,
             BirthSign: this.state.BirthSign,
-         //   loggedInUserId: sessionStorage.getItem("uid")    
             loggedInUserId:  this.state.loggedInUserId       
         };
         
@@ -102,6 +110,7 @@ class addPersonalInformation extends Component {
             .then(data=>data.json())
             .then(value => {
                             console.log(JSON.stringify(value));
+                            this.updatePersonalInfoStatus();
                             const history = this.props.history;
                             history.push("/users");
                             })
@@ -226,12 +235,4 @@ class addPersonalInformation extends Component {
     }
 }
 
-class Options extends Component {
-    render(){
-        return(
-            <option key={this.props.data} value={this.props.data}>{this.props.data}</option>
-        );
-    }
-}
- 
 export default addPersonalInformation;

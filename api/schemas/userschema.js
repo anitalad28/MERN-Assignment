@@ -9,6 +9,7 @@ module.exports = {
         EmailAddress: String,
         Password: String,
         Role: String,
-        IsApproved: String
+        IsApproved: String,
+        PersonalInfo: Boolean
       })
 }

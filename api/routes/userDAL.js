@@ -28,17 +28,39 @@ instance.set("jwtSecret", jwtSettings.jwtSecret);
 module.exports = {
     createUser(request, response){
             // parsing posted data into JSON
-            var user = {
-                "UserId": request.body.UserId,
-                "UserName": request.body.UserName,
-                "EmailAddress": request.body.EmailAddress,
-                "Password": request.body.Password,
-                "Role": request.body.Role,
-                "IsApproved": request.body.IsApproved
-            };
+            let user = request.body;
+            // var user = {
+            //     "UserId": request.body.UserId,
+            //     "UserName": request.body.UserName,
+            //     "EmailAddress": request.body.EmailAddress,
+            //     "Password": request.body.Password,
+            //     "Role": request.body.Role,
+            //     "IsApproved": request.body.IsApproved
+            // };
 
         // pass the parsed object to "create()" method
         userModel.create(user, function(err, res) {
+        if (err) {
+            response.statusCode = 500;
+            response.send(err);
+        }
+            response.send({ status: 200, data: res });
+        });
+    },
+
+    updateUser(request, response){
+        userId = request.params.UserId
+        var user = {
+            "UserId": request.body.UserId,
+            "UserName": request.body.UserName,
+            "EmailAddress": request.body.EmailAddress,
+            "Password": request.body.Password,
+            "Role": request.body.Role,
+            "IsApproved": request.body.IsApproved
+        };
+
+        // pass the parsed object to "create()" method
+        userModel.updateOne({UserId:userId},{$set: user }, function(err, res) {
         if (err) {
             response.statusCode = 500;
             response.send(err);
@@ -84,7 +106,7 @@ module.exports = {
     getUserDetails(request, response){ 
         console.log('getUserDetails');
          var UserId = request.params.userId;
-        userModel.find({ UserId : UserId },{IsApproved:1,_id:0}).exec(function(err, res) {
+        userModel.find({ UserId : UserId }).exec(function(err, res) {
             if (err) {
                 response.statusCode = 500;
                 response.send({ status: response.statusCode, error: err });
@@ -95,10 +117,7 @@ module.exports = {
     },
 
     approveUser(request, response){ 
-        var UserId = request.params.userId;       
-        //  console.log(UserId);
-        //  console.log(approveStatus);
-        
+        var UserId = request.params.userId;           
         userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'A' } }, function(err, res) {
             if (err) {
                 response.statusCode = 500;
@@ -111,18 +130,36 @@ module.exports = {
     
     rejectUser(request, response){ 
         var UserId = request.params.userId;        
-        //  console.log(UserId);
-        //  console.log(approveStatus);
-        
         userModel.updateOne({ _id : UserId },{ $set: { IsApproved :  'U' } }, function(err, res) {
             if (err) {
                 response.statusCode = 500;
                 response.send(err);
             }
-
             response.send({ status: 200, data: res });        
         });
-    }, 
+    },
+
+    updateUserPersonalInfoStatus(request, response){ 
+        var UserId = request.params.userId;        
+        userModel.updateOne({ UserId : UserId },{ $set: { PersonalInfo : true } }, function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send(err);
+            }
+            response.send({ status: 200, data: res });        
+        });
+    },
+    
+    pendingUser(request, response){ 
+        var UserId = request.params.userId;        
+        userModel.updateOne({ UserId : UserId },{ $set: { IsApproved :  'P' } }, function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send(err);
+            }
+            response.send({ status: 200, data: res });        
+        });
+    },
 
     authenticateUser(request, response) {
         var user = {

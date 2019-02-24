@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ApiService from '../../services/apiService';
 import AdminHeader from "./../Layouts/adminHeader";
+import TableHeader from "../../components/TableHeader.jsx";
 
 class User extends Component {
     constructor(props) {
@@ -10,8 +11,9 @@ class User extends Component {
             UserName: "",
             Password: "",
             EmailAddress: "",
-            IsApproved: "",
+            IsApproved: "P",
             isUserNameUniqueValue: false,
+            PersonalInfo: false,
             Role: "AccessUser",
             Roles: [],
             Users: [
@@ -98,21 +100,40 @@ class User extends Component {
             Password: this.state.Password,
             EmailAddress: this.state.EmailAddress,
             Role: this.state.Role,
-            IsApproved: "P",
+            IsApproved: this.state.IsApproved,
+            PersonalInfo: this.state.PersonalInfo,
         };
       
         this.apiService
             .createUser(user)
             .then(data => data.json())
-            .then(value => {
-                console.log(JSON.stringify(value));
+            .then(value => {                
                 this.loadUsers();
                  
             })
             .catch(error => console.log (error.status));
+    } 
+    
+    onClickUpdateUser = (e) => {
+        let user = {
+            UserId: this.state.UserId,
+            UserName: this.state.UserName,
+            Password: this.state.Password,
+            EmailAddress: this.state.EmailAddress,
+            Role: this.state.Role,
+            IsApproved: "P",
+        };
+        let userId = this.state.UserId;
+        this.apiService
+            .updateUser(user, userId)
+            .then(data => data.json())
+            .then(value => {               
+                this.loadUsers();                 
+            })
+            .catch(error => console.log (error.status));
     }   
 
-    getSelectedProduct(u) {       
+    getSelectedProduct(u) { 
         this.setState({ UserId: u.UserId });
         this.setState({ UserName: u.UserName });
         this.setState({ Password: u.Password });
@@ -133,8 +154,7 @@ class User extends Component {
                     <h2>Create User</h2> <br />
                     <div className='form-group'>
                         <label htmlFor="UserId">User Id</label>
-                        <input 
-                                type='text'
+                        <input  type='text' 
                                 name='UserId' 
                                 className='form-control' 
                                 value={this.state.UserId}
@@ -166,8 +186,7 @@ class User extends Component {
                     </div>
                     <div className='form-group'>
                         <label htmlFor="EmailAddress">Email Address</label>
-                        <input 
-                                type='text' 
+                        <input  type='text' 
                                 name='EmailAddress' 
                                 className='form-control' 
                                 value={this.state.EmailAddress} 
@@ -175,15 +194,13 @@ class User extends Component {
                     </div>
                     <div className='form-group'>
                         <label htmlFor="Role">Role</label>
-                        <select 
-                                className="form-control" 
+                        <select className="form-control" 
                                 name="Role" 
                                 value={this.state.Role} 
                                 onChange={this.onChangeUser.bind(this)}>
-                                    {this.state.Roles.map((role, idx) => (
-                                        <Options key={idx} optionValue={role} />
-                                    ))}                         
-                              ))} 
+                                    {this.state.Roles.map((r, idx) => (
+                                        <Options key={idx} optionValue={r} />
+                                    ))} 
                         </select>                         
                     </div>
                     <div className='form-group'>
@@ -191,18 +208,22 @@ class User extends Component {
                             <tbody>
                                 <tr>
                                     <td>
-                                        <input 
-                                                type='button' 
+                                        <input  type='button' 
                                                 value='Clear' 
                                                 className='btn btn-default' 
                                                 onClick={this.onClickClear.bind(this) } />
                                     </td>
                                     <td>
-                                        <input 
-                                            type='button' 
-                                            value='Add User' 
-                                            className='btn btn-default btn-success' 
-                                            onClick={this.onClickCreateUser.bind(this)} />
+                                        <input  type='button' 
+                                                value='Add User' 
+                                                className='btn btn-default btn-success' 
+                                                onClick={this.onClickCreateUser.bind(this)} />
+                                    </td>
+                                    <td>
+                                        <input  type='button' 
+                                                value='Update User' 
+                                                className='btn btn-default btn-success' 
+                                                onClick={this.onClickUpdateUser.bind(this)} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -213,11 +234,9 @@ class User extends Component {
                     <table className="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                {
-                                    this.state.headers.map((h, i) => 
-                                        ( <TableHeader key={i} header={h} /> )
-                                    )
-                                }
+                                {this.state.headers.map((h, i) => 
+                                    ( <TableHeader key={i} header={h} /> )
+                                )}
                             </tr>
                         </thead>
                          <tbody>
@@ -234,16 +253,10 @@ class User extends Component {
     }
 }
 
-class TableHeader extends Component {   
-    render() {
-        return <th>{this.props.header}</th>;
-    }
-}
-
 class Options extends Component {
     render(){
         return(            
-            <option value={this.props.optionValue.RoleId}>{this.props.optionValue.RoleName}</option>
+            <option value={this.props.optionValue.RoleName}>{this.props.optionValue.RoleName}</option>
         );
     }
 }
