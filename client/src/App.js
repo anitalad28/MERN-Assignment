@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import Login from './containers/Common/login';
-import Logout from './containers/Common/Logout';
+import Logout from './containers/Common/logout';
 import AdminDashboard from './containers/Admin/adminDashboard';
 import UserDashboard from './containers/AccessUser/accessUserDashboard';
 import OperatorDashboard from './containers/Operator/operatorDashboard';
@@ -11,6 +11,7 @@ import Role from './containers/Admin/role';
 import AddPersonalInformation from './containers/Common/addPersonalInformation';
 import EditPersonalInformation from './containers/Common/editPersonalInformation';
 import ViewPersonalInformation from './containers/Common/viewPersonalInformation';
+import Persons from "./containers/Admin/persons";
 
 import Register from './containers/Common/register';
 
@@ -36,6 +37,7 @@ class App extends Component {
           <Route exact path='/add-personal-info' component={ AddPersonalInformation } />
           <Route exact path='/edit-personal-info' component={ EditPersonalInformation } />  
           <Route exact path='/view-personal-info' component={ ViewPersonalInformation } /> 
+          <Route exact path='/persons' component={ Persons } />
             
         </Switch>
       </Router>

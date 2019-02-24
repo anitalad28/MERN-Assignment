@@ -78,5 +78,15 @@ module.exports = {
              console.log('getPersonalDetails' + res );
                 response.send({ status: 200, data: res });
         });
-    }
+    },
+
+    getPersons(request, response){       
+        personalInfoModel.find().exec(function(err, res) {
+            if (err) {
+                response.statusCode = 500;
+                response.send({ status: response.statusCode, error: err });
+            }
+                response.send({ status: 200, data: res });
+        });
+    },
 }

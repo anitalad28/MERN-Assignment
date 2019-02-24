@@ -264,6 +264,20 @@ instance.get("/api/users", function(request, response) {
 });
 
 // api to get users
+instance.get("/api/persons", function(request, response) {  
+    User.checkUserAuthentication( request, function( err, result ) {
+        if(err){
+             response.send({
+                success: false,
+                message: "Token verification failed after callback"
+            });
+        } else if( result ) {            
+            personalInfo.getPersons(request, response);
+        }
+    })
+});
+
+// api to get users
 instance.get("/api/pendingusers", function(request, response) {  
     User.checkUserAuthentication( request, function( err, result ) {
         if(err){

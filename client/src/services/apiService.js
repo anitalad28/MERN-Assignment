@@ -185,6 +185,18 @@ export default class apiService {
         return promise;
     }
 
+    getPersons() {
+        console.log ("In get persons's Service call" + sessionStorage.getItem("token"));
+        let promise = fetch ('http://localhost:6060/api/persons', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : sessionStorage.getItem("token")
+            }           
+        });
+        return promise;
+    }
+
     isUserNameUnique(username) {
         console.log ("In checkUniqueUserName Service call" + JSON.stringify(username));
         let promise = fetch("http://localhost:6060/api/user/checkUserName", {
